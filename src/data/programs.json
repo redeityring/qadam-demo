@@ -1,0 +1,359 @@
+[
+  {
+    "id": "kbtu-is",
+    "universityId": "kbtu",
+    "title": "Информационные системы",
+    "field": "it",
+    "entrySubjects": ["math", "physics"],
+    "tuitionPerYearTenge": 1650000,
+    "historicalPassingENT": 108,
+    "grantsCount": 110,
+    "languages": ["ru", "kz", "en"],
+    "city": "almaty",
+    "dorm": true,
+    "sources": [
+      { "label": "kbtu.kz", "url": "https://kbtu.kz", "kind": "official" },
+      { "label": "Проходные баллы и гранты — демо, 2025", "kind": "demo" }
+    ]
+  },
+  {
+    "id": "kbtu-se",
+    "universityId": "kbtu",
+    "title": "Программная инженерия",
+    "field": "it",
+    "entrySubjects": ["math", "cs"],
+    "tuitionPerYearTenge": 1750000,
+    "historicalPassingENT": 112,
+    "grantsCount": 90,
+    "languages": ["ru", "en"],
+    "city": "almaty",
+    "dorm": true,
+    "sources": [
+      { "label": "kbtu.kz", "url": "https://kbtu.kz", "kind": "official" },
+      { "label": "Проходные баллы и гранты — демо, 2025", "kind": "demo" }
+    ]
+  },
+  {
+    "id": "aitu-cs",
+    "universityId": "aitu",
+    "title": "Компьютерные науки",
+    "field": "it",
+    "entrySubjects": ["math", "cs"],
+    "tuitionPerYearTenge": 1400000,
+    "historicalPassingENT": 105,
+    "grantsCount": 200,
+    "languages": ["ru", "kz", "en"],
+    "city": "astana",
+    "dorm": true,
+    "sources": [
+      { "label": "astanait.edu.kz", "url": "https://astanait.edu.kz", "kind": "official" },
+      { "label": "Проходные баллы и гранты — демо, 2025", "kind": "demo" }
+    ]
+  },
+  {
+    "id": "aitu-media",
+    "universityId": "aitu",
+    "title": "Медиатехнологии и коммуникации",
+    "field": "it",
+    "entrySubjects": ["cs", "geography"],
+    "tuitionPerYearTenge": 1250000,
+    "historicalPassingENT": 92,
+    "grantsCount": 120,
+    "languages": ["ru", "kz"],
+    "city": "astana",
+    "dorm": true,
+    "sources": [
+      { "label": "astanait.edu.kz", "url": "https://astanait.edu.kz", "kind": "official" },
+      { "label": "Проходные баллы и гранты — демо, 2025", "kind": "demo" }
+    ]
+  },
+  {
+    "id": "iitu-is",
+    "universityId": "iitu",
+    "title": "Информационные системы",
+    "field": "it",
+    "entrySubjects": ["math", "cs"],
+    "tuitionPerYearTenge": 1200000,
+    "historicalPassingENT": 90,
+    "grantsCount": 150,
+    "languages": ["ru", "kz", "en"],
+    "city": "almaty",
+    "dorm": true,
+    "sources": [
+      { "label": "iitu.kz", "url": "https://iitu.kz", "kind": "official" },
+      { "label": "Проходные баллы и гранты — демо, 2025", "kind": "demo" }
+    ]
+  },
+  {
+    "id": "iitu-sec",
+    "universityId": "iitu",
+    "title": "Кибербезопасность",
+    "field": "it",
+    "entrySubjects": ["math", "physics"],
+    "tuitionPerYearTenge": 1300000,
+    "historicalPassingENT": 95,
+    "grantsCount": 100,
+    "languages": ["ru", "kz", "en"],
+    "city": "almaty",
+    "dorm": true,
+    "sources": [
+      { "label": "iitu.kz", "url": "https://iitu.kz", "kind": "official" },
+      { "label": "Проходные баллы и гранты — демо, 2025", "kind": "demo" }
+    ]
+  },
+  {
+    "id": "satbayev-mine",
+    "universityId": "satbayev",
+    "title": "Горное дело",
+    "field": "engineering",
+    "entrySubjects": ["math", "physics"],
+    "tuitionPerYearTenge": 850000,
+    "historicalPassingENT": 78,
+    "grantsCount": 320,
+    "languages": ["ru", "kz"],
+    "city": "almaty",
+    "dorm": true,
+    "sources": [
+      { "label": "satbayev.university", "url": "https://satbayev.university", "kind": "official" },
+      { "label": "Проходные баллы и гранты — демо, 2025", "kind": "demo" }
+    ]
+  },
+  {
+    "id": "satbayev-chem",
+    "universityId": "satbayev",
+    "title": "Химическая инженерия",
+    "field": "engineering",
+    "entrySubjects": ["math", "chemistry"],
+    "tuitionPerYearTenge": 800000,
+    "historicalPassingENT": 75,
+    "grantsCount": 180,
+    "languages": ["ru", "kz"],
+    "city": "almaty",
+    "dorm": true,
+    "sources": [
+      { "label": "satbayev.university", "url": "https://satbayev.university", "kind": "official" },
+      { "label": "Проходные баллы и гранты — демо, 2025", "kind": "demo" }
+    ]
+  },
+  {
+    "id": "narxoz-fin",
+    "universityId": "narxoz",
+    "title": "Финансы",
+    "field": "economics",
+    "entrySubjects": ["math", "economics"],
+    "tuitionPerYearTenge": 1150000,
+    "historicalPassingENT": 88,
+    "grantsCount": 120,
+    "languages": ["ru", "kz", "en"],
+    "city": "almaty",
+    "dorm": false,
+    "sources": [
+      { "label": "narxoz.kz", "url": "https://narxoz.kz", "kind": "official" },
+      { "label": "Проходные баллы и гранты — демо, 2025", "kind": "demo" }
+    ]
+  },
+  {
+    "id": "narxoz-mgmt",
+    "universityId": "narxoz",
+    "title": "Менеджмент",
+    "field": "economics",
+    "entrySubjects": ["economics", "geography"],
+    "tuitionPerYearTenge": 1050000,
+    "historicalPassingENT": 82,
+    "grantsCount": 90,
+    "languages": ["ru", "kz", "en"],
+    "city": "almaty",
+    "dorm": false,
+    "sources": [
+      { "label": "narxoz.kz", "url": "https://narxoz.kz", "kind": "official" },
+      { "label": "Проходные баллы и гранты — демо, 2025", "kind": "demo" }
+    ]
+  },
+  {
+    "id": "kaznu-eco",
+    "universityId": "kaznu",
+    "title": "Экономика",
+    "field": "economics",
+    "entrySubjects": ["math", "economics"],
+    "tuitionPerYearTenge": 620000,
+    "historicalPassingENT": 85,
+    "grantsCount": 250,
+    "languages": ["ru", "kz"],
+    "city": "almaty",
+    "dorm": true,
+    "sources": [
+      { "label": "kaznu.kz", "url": "https://kaznu.kz", "kind": "official" },
+      { "label": "Проходные баллы и гранты — демо, 2025", "kind": "demo" }
+    ]
+  },
+  {
+    "id": "kaznu-jour",
+    "universityId": "kaznu",
+    "title": "Журналистика",
+    "field": "humanities",
+    "entrySubjects": ["kazakh", "history"],
+    "tuitionPerYearTenge": 540000,
+    "historicalPassingENT": 80,
+    "grantsCount": 100,
+    "languages": ["ru", "kz"],
+    "city": "almaty",
+    "dorm": true,
+    "sources": [
+      { "label": "kaznu.kz", "url": "https://kaznu.kz", "kind": "official" },
+      { "label": "Проходные баллы и гранты — демо, 2025", "kind": "demo" }
+    ]
+  },
+  {
+    "id": "kaznu-bio",
+    "universityId": "kaznu",
+    "title": "Биология",
+    "field": "natural",
+    "entrySubjects": ["biology", "chemistry"],
+    "tuitionPerYearTenge": 580000,
+    "historicalPassingENT": 78,
+    "grantsCount": 160,
+    "languages": ["ru", "kz"],
+    "city": "almaty",
+    "dorm": true,
+    "sources": [
+      { "label": "kaznu.kz", "url": "https://kaznu.kz", "kind": "official" },
+      { "label": "Проходные баллы и гранты — демо, 2025", "kind": "demo" }
+    ]
+  },
+  {
+    "id": "enu-law",
+    "universityId": "evrasia",
+    "title": "Юриспруденция",
+    "field": "humanities",
+    "entrySubjects": ["history", "kazakh"],
+    "tuitionPerYearTenge": 560000,
+    "historicalPassingENT": 84,
+    "grantsCount": 210,
+    "languages": ["ru", "kz"],
+    "city": "astana",
+    "dorm": true,
+    "sources": [
+      { "label": "enu.kz", "url": "https://enu.kz", "kind": "official" },
+      { "label": "Проходные баллы и гранты — демо, 2025", "kind": "demo" }
+    ]
+  },
+  {
+    "id": "enu-it",
+    "universityId": "evrasia",
+    "title": "Информационные технологии",
+    "field": "it",
+    "entrySubjects": ["math", "physics"],
+    "tuitionPerYearTenge": 660000,
+    "historicalPassingENT": 86,
+    "grantsCount": 240,
+    "languages": ["ru", "kz"],
+    "city": "astana",
+    "dorm": true,
+    "sources": [
+      { "label": "enu.kz", "url": "https://enu.kz", "kind": "official" },
+      { "label": "Проходные баллы и гранты — демо, 2025", "kind": "demo" }
+    ]
+  },
+  {
+    "id": "sdu-cs",
+    "universityId": "sdu",
+    "title": "Computer Science",
+    "field": "it",
+    "entrySubjects": ["math", "physics"],
+    "tuitionPerYearTenge": 1450000,
+    "historicalPassingENT": 88,
+    "grantsCount": 60,
+    "languages": ["en", "ru"],
+    "city": "almaty",
+    "dorm": true,
+    "sources": [
+      { "label": "sdu.edu.kz", "url": "https://sdu.edu.kz", "kind": "official" },
+      { "label": "Проходные баллы и гранты — демо, 2025", "kind": "demo" }
+    ]
+  },
+  {
+    "id": "sdu-english",
+    "universityId": "sdu",
+    "title": "Иностранные языки (English)",
+    "field": "humanities",
+    "entrySubjects": ["english", "kazakh"],
+    "tuitionPerYearTenge": 980000,
+    "historicalPassingENT": 76,
+    "grantsCount": 40,
+    "languages": ["en", "ru", "kz"],
+    "city": "almaty",
+    "dorm": true,
+    "sources": [
+      { "label": "sdu.edu.kz", "url": "https://sdu.edu.kz", "kind": "official" },
+      { "label": "Проходные баллы и гранты — демо, 2025", "kind": "demo" }
+    ]
+  },
+  {
+    "id": "medkz-md",
+    "universityId": "medkz",
+    "title": "Общая медицина",
+    "field": "medicine",
+    "entrySubjects": ["biology", "chemistry"],
+    "tuitionPerYearTenge": 2400000,
+    "historicalPassingENT": 115,
+    "grantsCount": 400,
+    "languages": ["ru", "kz", "en"],
+    "city": "almaty",
+    "dorm": true,
+    "sources": [
+      { "label": "kaznmu.kz", "url": "https://kaznmu.kz", "kind": "official" },
+      { "label": "Проходные баллы и гранты — демо, 2025", "kind": "demo" }
+    ]
+  },
+  {
+    "id": "medkz-dent",
+    "universityId": "medkz",
+    "title": "Стоматология",
+    "field": "medicine",
+    "entrySubjects": ["biology", "chemistry"],
+    "tuitionPerYearTenge": 2800000,
+    "historicalPassingENT": 120,
+    "grantsCount": 90,
+    "languages": ["ru", "kz"],
+    "city": "almaty",
+    "dorm": true,
+    "sources": [
+      { "label": "kaznmu.kz", "url": "https://kaznmu.kz", "kind": "official" },
+      { "label": "Проходные баллы и гранты — демо, 2025", "kind": "demo" }
+    ]
+  },
+  {
+    "id": "dku-is",
+    "universityId": "dku",
+    "title": "Информационные системы",
+    "field": "it",
+    "entrySubjects": ["math", "physics"],
+    "tuitionPerYearTenge": 520000,
+    "historicalPassingENT": 70,
+    "grantsCount": 80,
+    "languages": ["ru", "kz"],
+    "city": "almaty",
+    "dorm": false,
+    "sources": [
+      { "label": "dku.kz", "url": "https://dku.kz", "kind": "official" },
+      { "label": "Проходные баллы и гранты — демо, 2025", "kind": "demo" }
+    ]
+  },
+  {
+    "id": "dku-transport",
+    "universityId": "dku",
+    "title": "Транспортная инженерия",
+    "field": "engineering",
+    "entrySubjects": ["math", "physics"],
+    "tuitionPerYearTenge": 480000,
+    "historicalPassingENT": 65,
+    "grantsCount": 70,
+    "languages": ["ru", "kz"],
+    "city": "almaty",
+    "dorm": false,
+    "sources": [
+      { "label": "dku.kz", "url": "https://dku.kz", "kind": "official" },
+      { "label": "Проходные баллы и гранты — демо, 2025", "kind": "demo" }
+    ]
+  }
+]

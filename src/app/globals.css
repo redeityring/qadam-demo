@@ -1,26 +1,90 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-manrope);
+  --color-brand: #4f46e5;
+  --color-brand-dark: #3730a3;
+  --color-ink: #1e1b4b;
+  --color-accent: #f59e0b;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-slate-50 font-sans text-slate-900 antialiased;
+  }
+  ::selection {
+    @apply bg-indigo-100 text-indigo-900;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* --- Карточки --- */
+  .card {
+    @apply rounded-2xl bg-white shadow-sm ring-1 ring-slate-200;
+  }
+  .card-hover {
+    @apply transition hover:-translate-y-0.5 hover:shadow-md hover:ring-indigo-200;
+  }
+
+  /* --- Кнопки --- */
+  .btn {
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800;
+  }
+  .btn-secondary {
+    @apply bg-white text-indigo-700 ring-1 ring-indigo-200 hover:bg-indigo-50;
+  }
+  .btn-ghost {
+    @apply text-slate-600 hover:bg-slate-100 hover:text-slate-900;
+  }
+  .btn-accent {
+    @apply bg-amber-500 text-white hover:bg-amber-600 active:bg-amber-700;
+  }
+
+  /* --- Поля ввода --- */
+  .label {
+    @apply mb-2 block text-sm font-semibold text-slate-700;
+  }
+  .input {
+    @apply w-full rounded-xl border-0 bg-white px-4 py-3 text-sm text-slate-900 ring-1 ring-slate-300 transition placeholder:text-slate-400 focus:ring-2 focus:ring-indigo-600 focus:outline-none;
+  }
+  .input-error {
+    @apply ring-2 ring-red-500;
+  }
+  .field-error {
+    @apply mt-1.5 text-xs font-medium text-red-600;
+  }
+
+  /* --- Бейджи и чипы --- */
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold;
+  }
+  .badge-demo {
+    @apply bg-amber-50 text-amber-700 ring-1 ring-amber-200;
+  }
+  .badge-source {
+    @apply bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200;
+  }
+  .chip {
+    @apply cursor-pointer rounded-full px-4 py-2 text-sm font-medium ring-1 transition select-none;
+  }
+  .chip-off {
+    @apply bg-white text-slate-600 ring-slate-300 hover:ring-indigo-400;
+  }
+  .chip-on {
+    @apply bg-indigo-600 text-white ring-indigo-600;
+  }
+
+  /* --- Прочее --- */
+  .section-title {
+    @apply text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl;
+  }
+  .muted {
+    @apply text-sm text-slate-500;
+  }
 }
