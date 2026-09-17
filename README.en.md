@@ -1,4 +1,4 @@
-# Qadam.kz — personal admission journey (English)
+# Qadam — personal admission journey (English)
 
 > **Qadam** (Kazakh for “step”) is an AI service that turns an applicant's profile and goal
 > into a clear route: where to apply, why it fits, and what to do next.

@@ -1,82 +1,33 @@
 [
-  {
-    "id": "kbtu",
-    "name": "Казахстанско-Британский технический университет",
-    "shortName": "КБТУ",
-    "city": "almaty",
-    "blurb": "Технический вуз с сильной IT-подготовкой и международными программами.",
-    "website": "https://kbtu.kz"
-  },
-  {
-    "id": "aitu",
-    "name": "Астанинский IT-университет",
-    "shortName": "AITU",
-    "city": "astana",
-    "blurb": "Профильный IT-университет в столице, проектное обучение.",
-    "website": "https://astanait.edu.kz"
-  },
-  {
-    "id": "iitu",
-    "name": "Международный информационные технологии университет",
-    "shortName": "ИИТУ",
-    "city": "almaty",
-    "blurb": "IT-университет с англоязычными программами.",
-    "website": "https://iitu.kz"
-  },
-  {
-    "id": "satbayev",
-    "name": "Казахский национальный исследовательский технический университет им. К.И. Сатпаева",
-    "shortName": "КазНТУ им. Сатпаева",
-    "city": "almaty",
-    "blurb": "Крупнейший технический вуз: инженерия, геология, IT.",
-    "website": "https://satbayev.university"
-  },
-  {
-    "id": "narxoz",
-    "name": "Университет Нархоз",
-    "shortName": "Нархоз",
-    "city": "almaty",
-    "blurb": "Ведущий экономический вуз, бизнес-программы.",
-    "website": "https://narxoz.kz"
-  },
-  {
-    "id": "kaznu",
-    "name": "Казахский национальный университет им. аль-Фараби",
-    "shortName": "КазНУ",
-    "city": "almaty",
-    "blurb": "Классический многопрофильный университет, широкий выбор программ.",
-    "website": "https://kaznu.kz"
-  },
-  {
-    "id": "evrasia",
-    "name": "Университет им. Л.Н. Гумилёва",
-    "shortName": "ЕНУ",
-    "city": "astana",
-    "blurb": "Многопрофильный университет с сильной гуманитарной и инженерной подготовкой.",
-    "website": "https://enu.kz"
-  },
-  {
-    "id": "sdu",
-    "name": "Университет Сулеймана Демиреля",
-    "shortName": "СДУ",
-    "city": "almaty",
-    "blurb": "Университет с англоязычными программами и кампусом в Алматы.",
-    "website": "https://sdu.edu.kz"
-  },
-  {
-    "id": "medkz",
-    "name": "Казахский национальный медицинский университет им. С.Д. Асфендиярова",
-    "shortName": "КазНМУ",
-    "city": "almaty",
-    "blurb": "Главный медицинский вуз страны: общая медицина, стоматология, фармация.",
-    "website": "https://kaznmu.kz"
-  },
-  {
-    "id": "dku",
-    "name": "Университет Д. Кунаева",
-    "shortName": "ДКУ",
-    "city": "almaty",
-    "blurb": "Городской вуз: IT, транспорт, экономика, умеренная стоимость.",
-    "website": "https://dku.kz"
-  }
+  { "id": "kbtu", "name": "Казахстанско-Британский технический университет", "shortName": "КБТУ", "city": "almaty", "blurb": "Технический вуз с сильной IT-подготовкой и международными программами.", "website": "https://kbtu.kz", "rating": 4.8 },
+  { "id": "aitu", "name": "Астанинский IT-университет", "shortName": "AITU", "city": "astana", "blurb": "Профильный IT-университет в столице, проектное обучение.", "website": "https://astanait.edu.kz", "rating": 4.6 },
+  { "id": "iitu", "name": "Международный IT-университет", "shortName": "IITU", "city": "almaty", "blurb": "IT-университет с англоязычными программами.", "website": "https://iitu.kz", "rating": 4.4 },
+  { "id": "satbayev", "name": "Казахский национальный исследовательский технический университет им. К.И. Сатпаева", "shortName": "КазНТУ", "city": "almaty", "blurb": "Крупнейший технический вуз: инженерия, геология, IT.", "website": "https://satbayev.university", "rating": 4.5 },
+  { "id": "narxoz", "name": "Университет Нархоз", "shortName": "Нархоз", "city": "almaty", "blurb": "Ведущий экономический вуз, бизнес-программы.", "website": "https://narxoz.kz", "rating": 4.4 },
+  { "id": "kaznu", "name": "Казахский национальный университет им. аль-Фараби", "shortName": "КазНУ", "city": "almaty", "blurb": "Флагманский многопрофильный университет, самый широкий выбор программ.", "website": "https://kaznu.kz", "rating": 4.9 },
+  { "id": "evrasia", "name": "Университет им. Л.Н. Гумилёва", "shortName": "ЕНУ", "city": "astana", "blurb": "Многопрофильный университет с сильной гуманитарной и инженерной подготовкой.", "website": "https://enu.kz", "rating": 4.6 },
+  { "id": "sdu", "name": "Университет Сулеймана Демиреля", "shortName": "СДУ", "city": "almaty", "blurb": "Университет с англоязычными программами и кампусом в Алматы.", "website": "https://sdu.edu.kz", "rating": 4.3 },
+  { "id": "medkz", "name": "Казахский национальный медицинский университет им. С.Д. Асфендиярова", "shortName": "КазНМУ", "city": "almaty", "blurb": "Главный медицинский вуз страны: общая медицина, стоматология, фармация.", "website": "https://kaznmu.kz", "rating": 4.7 },
+  { "id": "dku", "name": "Университет Д. Кунаева", "shortName": "ДКУ", "city": "almaty", "blurb": "Городской вуз: IT, транспорт, экономика, умеренная стоимость.", "website": "https://dku.kz", "rating": 4.0 },
+  { "id": "nu", "name": "Назарбаев Университет", "shortName": "NU", "city": "astana", "blurb": "Исследовательский университет с обучением на английском.", "website": "https://nu.edu.kz", "rating": 5.0 },
+  { "id": "kau", "name": "Казахско-Американский университет", "shortName": "КАУ", "city": "almaty", "blurb": "Гуманитарный и IT-вуз с американской моделью обучения.", "website": "https://kau.edu.kz", "rating": 4.1 },
+  { "id": "alau", "name": "Академия логистики и транспорта", "shortName": "АЛАУ", "city": "almaty", "blurb": "Транспорт, логистика и авиация.", "website": "https://alau.kz", "rating": 4.2 },
+  { "id": "kazgasa", "name": "Казахская головная архитектурно-строительная академия", "shortName": "КазГАСА", "city": "almaty", "blurb": "Архитектура и строительство — академия с сильной школой.", "website": "https://kazgasa.kz", "rating": 4.2 },
+  { "id": "kimep", "name": "Университет КИМЭП", "shortName": "КИМЭП", "city": "almaty", "blurb": "Первый вуз с полным обучением на английском, экономика и общественные науки.", "website": "https://kimep.kz", "rating": 4.6 },
+  { "id": "muk", "name": "Академия транспорта и коммуникаций им. М. Тынышпаева", "shortName": "АТК", "city": "almaty", "blurb": "Транспорт и строительство, умеренные цены.", "website": "https://kasce.edu.kz", "rating": 4.0 },
+  { "id": "skma", "name": "Южно-Казахстанская медицинская академия", "shortName": "ЮКМА", "city": "shymkent", "blurb": "Крупная медицинская академия юга страны.", "website": "https://skma.kz", "rating": 4.2 },
+  { "id": "muk-shymkent", "name": "Академия транспорта и коммуникаций (Шымкент)", "shortName": "АТК Шымкент", "city": "shymkent", "blurb": "Транспортно-строительный кампус в Шымкенте.", "website": "https://kasce.edu.kz", "rating": 3.9 },
+  { "id": "karstu", "name": "Карагандинский технический университет", "shortName": "КарТУ", "city": "karaganda", "blurb": "Индустриальный вуз: горное дело, металлургия, машиностроение.", "website": "https://ktu.karaganda.kz", "rating": 4.1 },
+  { "id": "buketov", "name": "Университет им. Е.А. Букетова", "shortName": "КарГУ", "city": "karaganda", "blurb": "Классический университет центра Казахстана.", "website": "https://ksu.karaganda.kz", "rating": 4.2 },
+  { "id": "ksma", "name": "Карагандинская медицинская академия", "shortName": "КМА", "city": "karaganda", "blurb": "Медицинская академия с клинической базой.", "website": "https://qmu.kz", "rating": 4.1 },
+  { "id": "arsu", "name": "Актюбинский региональный университет им. К. Жубанова", "shortName": "АРГУ", "city": "aktobe", "blurb": "Многопрофильный вуз Запада: педагогика, техника, медицина.", "website": "https://arsu.kz", "rating": 3.9 },
+  { "id": "tarazsu", "name": "Университет «Тараз»", "shortName": "ТарУ", "city": "taraz", "blurb": "Инженерия, экономика и педагогика юга.", "website": "https://taraz.edu.kz", "rating": 3.8 },
+  { "id": "inou", "name": "Инновационный университет Евразии", "shortName": "ИнЕУ", "city": "pavlodar", "blurb": "Крупнейший вуз северо-востока: IT, экономика, инженерия.", "website": "https://inou.kz", "rating": 4.0 },
+  { "id": "vku", "name": "Восточно-Казахстанский университет", "shortName": "ВКГУ", "city": "oskemen", "blurb": "Классический университет востока страны.", "website": "https://vku.kz", "rating": 4.0 },
+  { "id": "agit", "name": "Атырауский университет нефти и газа", "shortName": "АУНГ", "city": "atyrau", "blurb": "Нефтегазовое дело прямо в нефтяной столице.", "website": "https://aung.kz", "rating": 4.0 },
+  { "id": "turkstanu", "name": "Международный казахско-турецкий университет им. Яссави", "shortName": "МКТУ им. Яссави", "city": "turkistan", "blurb": "Многопрофильный вуз Туркестана.", "website": "https://ayu.edu.kz", "rating": 4.0 },
+  { "id": "aktau-su", "name": "Каспийский университет технологий и инженеринга им. Ш. Есенова", "shortName": "Каспийский", "city": "aktau", "blurb": "Морская инженерия и нефтегаз на Каспии.", "website": "https://aktau-business.edu.kz", "rating": 3.9 },
+  { "id": "kostanay-su", "name": "Костанайский региональный университет им. А. Байтурсынулы", "shortName": "КРУ", "city": "kostanay", "blurb": "Многопрофильный вуз севера.", "website": "https://ksu.kostanay.edu.kz", "rating": 3.9 },
+  { "id": "semey-mu", "name": "Медицинский университет Семея", "shortName": "МУС", "city": "semey", "blurb": "Медицинский вуз Восточного Казахстана.", "website": "https://semeymedical.edu.kz", "rating": 4.0 },
+  { "id": "semey-vku", "name": "ВКГУ им. М. Ауэзова (Семей)", "shortName": "ВКГУ Семей", "city": "semey", "blurb": "Кампус ВКГУ в Семее, педагогика и IT.", "website": "https://vku.kz", "rating": 3.8 }
 ]

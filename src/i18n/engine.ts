@@ -5,7 +5,7 @@
  */
 
 import type { Lang } from "@/i18n/dictionaries";
-import type { CityId, ExamId, Profile, SubjectId } from "@/types";
+import type { CityId, ExamId, MajorId, Profile, SubjectId } from "@/types";
 import { formatTenge } from "@/lib/constants";
 
 /* ---------- Справочники ---------- */
@@ -14,6 +14,16 @@ export const CITY_L: Record<CityId, Record<Lang, string>> = {
   almaty: { ru: "Алматы", kk: "Алматы", en: "Almaty" },
   astana: { ru: "Астана", kk: "Астана", en: "Astana" },
   shymkent: { ru: "Шымкент", kk: "Шымкент", en: "Shymkent" },
+  karaganda: { ru: "Караганда", kk: "Қарағанды", en: "Karaganda" },
+  aktobe: { ru: "Актобе", kk: "Ақтөбе", en: "Aktobe" },
+  taraz: { ru: "Тараз", kk: "Тараз", en: "Taraz" },
+  pavlodar: { ru: "Павлодар", kk: "Павлодар", en: "Pavlodar" },
+  oskemen: { ru: "Усть-Каменогорск", kk: "Өскемен", en: "Oskemen" },
+  atyrau: { ru: "Атырау", kk: "Атырау", en: "Atyrau" },
+  aktau: { ru: "Актау", kk: "Ақтау", en: "Aktau" },
+  turkistan: { ru: "Туркестан", kk: "Түркістан", en: "Turkistan" },
+  kostanay: { ru: "Костанай", kk: "Қостанай", en: "Kostanay" },
+  semey: { ru: "Семей", kk: "Семей", en: "Semey" },
   other: { ru: "Другой город", kk: "Басқа қала", en: "Another city" },
   any: { ru: "Не важно / готов переехать", kk: "Маңызды емес / көшуге дайынмын", en: "Any / ready to relocate" },
 };
@@ -24,18 +34,71 @@ export const SUBJECT_L: Record<SubjectId, Record<Lang, string>> = {
   cs: { ru: "Информатика", kk: "Информатика", en: "Computer science" },
   chemistry: { ru: "Химия", kk: "Химия", en: "Chemistry" },
   biology: { ru: "Биология", kk: "Биология", en: "Biology" },
-  history: { ru: "История", kk: "Тарих", en: "History" },
+  history: { ru: "История Казахстана", kk: "Қазақстан тарихы", en: "History of Kazakhstan" },
+  worldHistory: { ru: "Всемирная история", kk: "Әлем тарихы", en: "World history" },
   geography: { ru: "География", kk: "География", en: "Geography" },
   kazakh: { ru: "Казахский язык", kk: "Қазақ тілі", en: "Kazakh" },
   russian: { ru: "Русский язык", kk: "Орыс тілі", en: "Russian" },
   english: { ru: "Английский язык", kk: "Ағылшын тілі", en: "English" },
   economics: { ru: "Экономика", kk: "Экономика", en: "Economics" },
+  law: { ru: "Право", kk: "Құқық", en: "Law basics" },
+  art: { ru: "Художественный труд / черчение", kk: "Көркем еңбек / сызу", en: "Art & drafting" },
+  pe: { ru: "Физкультура", kk: "Дене шынықтыру", en: "Physical education" },
+  german: { ru: "Немецкий язык", kk: "Неміс тілі", en: "German" },
+  french: { ru: "Французский язык", kk: "Француз тілі", en: "French" },
 };
 
 export const EXAM_L: Record<ExamId, Record<Lang, string>> = {
   ent: { ru: "ЕНТ", kk: "ЖБТ", en: "ENT" },
   ielts: { ru: "IELTS", kk: "IELTS", en: "IELTS" },
   sat: { ru: "SAT", kk: "SAT", en: "SAT" },
+};
+
+/** Локализованные названия специальностей (майоров) */
+export const MAJOR_L: Record<MajorId, Record<Lang, string>> = {
+  // IT
+  "computer-science": { ru: "Компьютерные науки", kk: "Компьютерлік ғылымдар", en: "Computer Science" },
+  "information-systems": { ru: "Информационные системы", kk: "Ақпараттық жүйелер", en: "Information Systems" },
+  "software-engineering": { ru: "Программная инженерия", kk: "Бағдарламалық инженерия", en: "Software Engineering" },
+  cybersecurity: { ru: "Кибербезопасность", kk: "Киберқауіпсіздік", en: "Cybersecurity" },
+  "media-tech": { ru: "Медиатехнологии и коммуникации", kk: "Медиатехнологиялар", en: "Media Technologies" },
+  telecom: { ru: "Телекоммуникации", kk: "Телекоммуникациялар", en: "Telecommunications" },
+  // Engineering
+  mining: { ru: "Горное дело", kk: "Тау-кен ісі", en: "Mining Engineering" },
+  "chem-eng": { ru: "Химическая инженерия", kk: "Химиялық инженерия", en: "Chemical Engineering" },
+  civil: { ru: "Строительство", kk: "Құрылыс", en: "Civil Engineering" },
+  mechanical: { ru: "Машиностроение", kk: "Машина жасау", en: "Mechanical Engineering" },
+  "oil-gas": { ru: "Нефтегазовое дело", kk: "Мұнай-газ ісі", en: "Oil & Gas Engineering" },
+  transport: { ru: "Транспортная инженерия", kk: "Көлік инженериясы", en: "Transport Engineering" },
+  power: { ru: "Энергетика", kk: "Энергетика", en: "Power Engineering" },
+  geology: { ru: "Геология", kk: "Геология", en: "Geology" },
+  metallurgy: { ru: "Металлургия", kk: "Металлургия", en: "Metallurgy" },
+  // Medicine
+  "general-medicine": { ru: "Общая медицина", kk: "Жалпы медицина", en: "General Medicine" },
+  dentistry: { ru: "Стоматология", kk: "Стоматология", en: "Dentistry" },
+  pharmacy: { ru: "Фармация", kk: "Фармация", en: "Pharmacy" },
+  nursing: { ru: "Сестринское дело", kk: "Медбік ісі", en: "Nursing" },
+  // Economics
+  finance: { ru: "Финансы", kk: "Қаржы", en: "Finance" },
+  management: { ru: "Менеджмент", kk: "Менеджмент", en: "Management" },
+  economics: { ru: "Экономика", kk: "Экономика", en: "Economics" },
+  accounting: { ru: "Учёт и аудит", kk: "Есеп және аудит", en: "Accounting & Audit" },
+  tourism: { ru: "Туризм", kk: "Туризм", en: "Tourism" },
+  logistics: { ru: "Логистика", kk: "Логистика", en: "Logistics" },
+  // Humanities
+  law: { ru: "Юриспруденция", kk: "Құқықтану", en: "Law" },
+  journalism: { ru: "Журналистика", kk: "Журналистика", en: "Journalism" },
+  "international-relations": { ru: "Международные отношения", kk: "Халықаралық қатынастар", en: "International Relations" },
+  "foreign-philology": { ru: "Иностранная филология", kk: "Шетел филологиясы", en: "Foreign Philology" },
+  translation: { ru: "Переводческое дело", kk: "Аударма ісі", en: "Translation Studies" },
+  pedagogy: { ru: "Педагогика", kk: "Педагогика", en: "Education" },
+  psychology: { ru: "Психология", kk: "Психология", en: "Psychology" },
+  // Natural
+  biology: { ru: "Биология", kk: "Биология", en: "Biology" },
+  chemistry: { ru: "Химия", kk: "Химия", en: "Chemistry" },
+  ecology: { ru: "Экология", kk: "Экология", en: "Ecology" },
+  "geography-science": { ru: "География", kk: "География", en: "Geography" },
+  mathematics: { ru: "Математика", kk: "Математика", en: "Mathematics" },
 };
 
 const FIELD_L: Record<SubjectId, Record<Lang, string>> = {
@@ -45,22 +108,67 @@ const FIELD_L: Record<SubjectId, Record<Lang, string>> = {
   chemistry: { ru: "химических и медицинских", kk: "химиялық және медициналық", en: "chemical & medical" },
   biology: { ru: "медицинских и биологических", kk: "медициналық және биологиялық", en: "medical & biological" },
   history: { ru: "гуманитарных и юридических", kk: "гуманитарлық және құқықтық", en: "humanities & law" },
+  worldHistory: { ru: "исторических и международных", kk: "тарихи және халықаралық", en: "historical & international" },
   geography: { ru: "экономических и экологических", kk: "экономикалық және экологиялық", en: "economic & environmental" },
   kazakh: { ru: "филологических и педагогических", kk: "филологиялық және педагогикалық", en: "philology & education" },
   russian: { ru: "филологических и коммуникативных", kk: "филологиялық және коммуникативтік", en: "philology & communication" },
   english: { ru: "международных и языковых", kk: "халықаралық және тілдік", en: "international & language" },
   economics: { ru: "экономических и бизнес-", kk: "экономикалық және бизнес-", en: "economics & business" },
+  law: { ru: "юридических", kk: "құқықтық", en: "legal" },
+  art: { ru: "архитектурных и творческих", kk: "сәулеттік және шығармашылық", en: "architecture & creative" },
+  pe: { ru: "спортивных и педагогических", kk: "спорттық және педагогикалық", en: "sports & education" },
+  german: { ru: "языковых и международных", kk: "тілдік және халықаралық", en: "language & international" },
+  french: { ru: "языковых и международных", kk: "тілдік және халықаралық", en: "language & international" },
 };
 
 const L = (lang: Lang) => (lang === "kk" ? 1 : lang === "en" ? 2 : 0) as 0 | 1 | 2;
 const pick = <T,>(lang: Lang, [ru, kk, en]: [T, T, T]): T => [ru, kk, en][L(lang)];
 
+/* ---------- Поиск: предметы + специальности ---------- */
+
+function norm(s: string): string {
+  return s.toLowerCase().replace(/[ё]/g, "е").trim();
+}
+
+/** Поиск майоров по запросу (ru/en текст названия). Возвращает id с оценкой релевантности. */
+export function searchMajors(query: string): Array<{ id: MajorId; score: number }> {
+  const q = norm(query);
+  if (!q) return [];
+  const out: Array<{ id: MajorId; score: number }> = [];
+  for (const [id, l] of Object.entries(MAJOR_L) as Array<[MajorId, Record<Lang, string>]>) {
+    const hay = `${norm(l.ru)} ${norm(l.en)} ${id}`;
+    const idx = hay.indexOf(q);
+    if (idx >= 0) out.push({ id, score: idx === 0 ? 2 : 1 });
+  }
+  return out.sort((a, b) => b.score - a.score).slice(0, 8);
+}
+
+/** Поиск предметов по запросу */
+export function searchSubjects(query: string): Array<{ id: SubjectId; score: number }> {
+  const q = norm(query);
+  if (!q) return [];
+  const out: Array<{ id: SubjectId; score: number }> = [];
+  for (const [id, l] of Object.entries(SUBJECT_L) as Array<[SubjectId, Record<Lang, string>]>) {
+    const hay = `${norm(l.ru)} ${norm(l.en)} ${norm(l.kk)} ${id}`;
+    const idx = hay.indexOf(q);
+    if (idx >= 0) out.push({ id, score: idx === 0 ? 2 : 1 });
+  }
+  return out.sort((a, b) => b.score - a.score).slice(0, 8);
+}
+
 /* ---------- Диагностика ---------- */
+
+export function budgetLabel(p: Profile, lang: Lang): string {
+  if (p.budgetAny) {
+    return pick(lang, ["Бюджет не ограничен", "Бюджет шектеусіз", "Budget is not a constraint"]);
+  }
+  return formatTenge(p.budgetPerYearTenge, lang);
+}
 
 export function diagGoal(p: Profile, lang: Lang): string {
   const city = CITY_L[p.city][lang];
   const fields = Array.from(new Set(p.interests.map((s) => FIELD_L[s][lang]))).slice(0, 2);
-  const f = fields.length ? fields.join(lang === "en" ? " / " : " / ") : pick(lang, ["выбранных направлений", "таңдалған бағыттар", "chosen fields"]);
+  const f = fields.length ? fields.join(" / ") : pick(lang, ["выбранных направлений", "таңдалған бағыттар", "chosen fields"]);
   if (lang === "en")
     return `Enrollment in ${p.targetYear} for a program in ${f}${p.city !== "any" ? `, city: ${city}` : " (city doesn't matter)"}.`;
   if (lang === "kk")
@@ -88,6 +196,16 @@ export function diagStrengths(p: Profile, lang: Lang): string[] {
       pick(lang, [`Интересы: ${interests}.`, `Қызығушылық: ${interests}.`, `Interests: ${interests}.`]),
     );
   }
+  if (p.desiredMajors?.length) {
+    const majors = p.desiredMajors.map((m) => MAJOR_L[m][lang]).join(", ");
+    out.push(
+      pick(lang, [
+        `Желаемые специальности: ${majors}.`,
+        `Қалаған мамандықтар: ${majors}.`,
+        `Desired majors: ${majors}.`,
+      ]),
+    );
+  }
   if (ent != null) {
     out.push(
       ent >= 100
@@ -98,7 +216,7 @@ export function diagStrengths(p: Profile, lang: Lang): string[] {
           ])
         : pick(lang, [
             `Прогноз ЕНТ ${ent} — есть программы, куда вы проходите, и запас времени для роста.`,
-            `ЖБТ болжамы ${ent} — өтетін бағдарламалар бар және өсуғе уақыт жеткілікті.`,
+            `ЖБТ болжамы ${ent} — өтетін бағдарламалар бар және өсуге уақыт жеткілікті.`,
             `ENT estimate ${ent} — there are programs you pass, with room to grow.`,
           ]),
     );
@@ -109,13 +227,18 @@ export function diagStrengths(p: Profile, lang: Lang): string[] {
 export function diagConstraints(p: Profile, lang: Lang): string[] {
   const out: string[] = [];
   const city = CITY_L[p.city][lang];
-  const budget = formatTenge(p.budgetPerYearTenge);
   out.push(
-    pick(lang, [
-      `Бюджет: до ${budget} в год${p.needsDorm ? " + общежитие" : ""}.`,
-      `Бюджет: жылына ${budget}${p.needsDorm ? " + жатақхана" : ""} дейін.`,
-      `Budget: up to ${budget} per year${p.needsDorm ? " + dormitory" : ""}.`,
-    ]),
+    p.budgetAny
+      ? pick(lang, [
+          `Бюджет: не ограничен${p.needsDorm ? " + общежитие" : ""} — рассматриваете и платные топ-программы.`,
+          `Бюджет: шектеусіз${p.needsDorm ? " + жатақхана" : ""} — үздік ақылы бағдарламалар да қарастырылады.`,
+          `Budget: not limited${p.needsDorm ? " + dormitory" : ""} — top paid programs are considered too.`,
+        ])
+      : pick(lang, [
+          `Бюджет: до ${formatTenge(p.budgetPerYearTenge, lang)} в год${p.needsDorm ? " + общежитие" : ""}.`,
+          `Бюджет: жылына ${formatTenge(p.budgetPerYearTenge, lang)}${p.needsDorm ? " + жатақхана" : ""} дейін.`,
+          `Budget: up to ${formatTenge(p.budgetPerYearTenge, lang)} per year${p.needsDorm ? " + dormitory" : ""}.`,
+        ]),
   );
   if (p.city === "other" || p.city === "any") {
     out.push(
@@ -141,6 +264,15 @@ export function diagConstraints(p: Profile, lang: Lang): string[] {
       `Study language: ${p.studyLanguage.toUpperCase()}.`,
     ]),
   );
+  if (p.plannedExams.includes("ielts")) {
+    out.push(
+      pick(lang, [
+        `IELTS: ${p.ieltsEstimate ? p.ieltsEstimate.toFixed(1) : "планируете сдавать"} — открывает англоязычные программы.`,
+        `IELTS: ${p.ieltsEstimate ? p.ieltsEstimate.toFixed(1) : "тапсыру жоспарланған"} — ағылшын тілді бағдарламалар ашылады.`,
+        `IELTS: ${p.ieltsEstimate ? p.ieltsEstimate.toFixed(1) : "planned"} — unlocks English-taught programs.`,
+      ]),
+    );
+  }
   if (p.countries === "kz+abroad") {
     out.push(
       pick(lang, [
@@ -155,7 +287,7 @@ export function diagConstraints(p: Profile, lang: Lang): string[] {
 
 export function diagSummary(p: Profile, lang: Lang): string {
   const city = CITY_L[p.city][lang];
-  const budget = formatTenge(p.budgetPerYearTenge);
+  const budget = budgetLabel(p, lang);
   const strong = Object.entries(p.strengths)
     .filter(([, v]) => (v ?? 0) >= 4)
     .map(([k]) => SUBJECT_L[k as SubjectId][lang]);
@@ -183,25 +315,40 @@ export function reasonSubjectsPartial(overlap: SubjectId[], lang: Lang): string 
   return `Часть предметов поступления (${list}) вам близка.`;
 }
 
+export function reasonMajorMatch(lang: Lang): string {
+  return pick(lang, [
+    "Совпадает с желаемой специальностью из вашей анкеты.",
+    "Сауалнамадағы қалаған мамандығыңызға сәйкес.",
+    "Matches a desired major from your questionnaire.",
+  ]);
+}
+
 export function reasonBudget(tuition: number, budget: number, lang: Lang): string {
-  const t = formatTenge(tuition);
-  const b = formatTenge(budget);
+  const t = formatTenge(tuition, lang);
+  const b = formatTenge(budget, lang);
   if (lang === "en") return `${t} per year — within your budget of ${b}.`;
   if (lang === "kk") return `${t} жылына — ${b} бюджетіңізге сай.`;
   return `${t} в год — в вашем бюджете до ${b}.`;
 }
 
+export function reasonBudgetAny(tuition: number, lang: Lang): string {
+  const t = formatTenge(tuition, lang);
+  if (lang === "en") return `${t} per year — shown because budget is not a constraint.`;
+  if (lang === "kk") return `${t} жылына — бюджет шектеусіз болғандықтан көрсетілген.`;
+  return `${t} в год — показано, так как бюджет не ограничен.`;
+}
+
 export function warnBudgetSlightly(tuition: number, budget: number, lang: Lang): string {
-  const t = formatTenge(tuition);
-  const b = formatTenge(budget);
+  const t = formatTenge(tuition, lang);
+  const b = formatTenge(budget, lang);
   if (lang === "en") return `Tuition ${t} is slightly above your budget (${b}) — consider a grant.`;
   if (lang === "kk") return `Құны ${t} бюджеттен (${b}) сәл жоғары — грантты қарастырыңыз.`;
   return `Стоимость ${t} немного выше бюджета (${b}) — рассмотрите грант.`;
 }
 
 export function warnBudgetFar(tuition: number, budget: number, lang: Lang): string {
-  const t = formatTenge(tuition);
-  const b = formatTenge(budget);
+  const t = formatTenge(tuition, lang);
+  const b = formatTenge(budget, lang);
   if (lang === "en") return `Tuition ${t} is well above your budget (${b}).`;
   if (lang === "kk") return `Құны ${t} бюджеттен (${b}) айтарлықтай жоғары.`;
   return `Стоимость ${t} заметно выше вашего бюджета (${b}).`;
@@ -269,6 +416,12 @@ export function reasonLanguage(lang: Lang): string {
     "Бағдарлама сізге қажетті оқу тілінде жүргізіледі.",
     "The program is taught in your preferred language.",
   ]);
+}
+
+export function reasonUniRating(rating: number, lang: Lang): string {
+  if (lang === "en") return `University rating ${rating.toFixed(1)}/5 — strong reputation in open rankings.`;
+  if (lang === "kk") return `Университет рейтингісі ${rating.toFixed(1)}/5 — ашық рейтингтерде жоғары баға.`;
+  return `Рейтинг вуза ${rating.toFixed(1)}/5 — высокая оценка в открытых рейтингах.`;
 }
 
 /* ---------- Roadmap ---------- */
@@ -448,7 +601,7 @@ export const SCHOLARSHIPS: Scholarship[] = [
     budgetMax: 1_500_000,
     note: {
       ru: "Для абитуриентов из семей с невысоким доходом: снижает финансовую нагрузку.",
-      kk: "Азаматтың табысы төмен отбасылар үшін: қаржылық жүктемені азайтады.",
+      kk: "Табысы төмен отбасылар үшін: қаржылық жүктемені азайтады.",
       en: "For applicants from lower-income families: reduces financial pressure.",
     },
   },
@@ -464,7 +617,7 @@ export const SCHOLARSHIPS: Scholarship[] = [
     budgetMax: null,
     note: {
       ru: "За высокий балл ЕНТ и достижения: автоматически рассматривается при подаче.",
-      kk: "Жоғары ЖБТ балы мен жетістіктер үшін: өтінпен бірге автоматты қарастырылады.",
+      kk: "Жоғары ЖБТ балы мен жетістіктер үшін: өтініммен бірге автоматты қарастырылады.",
       en: "For high ENT scores and achievements: considered automatically upon application.",
     },
   },
@@ -488,6 +641,6 @@ export const SCHOLARSHIPS: Scholarship[] = [
 
 export function scholarshipFits(s: Scholarship, p: Profile): boolean {
   if (p.entEstimate != null && s.minENT != null && p.entEstimate < s.minENT) return false;
-  if (s.budgetMax != null && p.budgetPerYearTenge > s.budgetMax) return false;
+  if (!p.budgetAny && s.budgetMax != null && p.budgetPerYearTenge > s.budgetMax) return false;
   return true;
 }

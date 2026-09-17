@@ -29,11 +29,17 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* Мобильные тапы: без задержки, без double-tap zoom на кнопках */
+    touch-action: manipulation;
   }
   body {
     background-color: var(--color-paper);
     color: var(--color-ink);
     font-family: var(--font-sans);
+    /* Никакого горизонтального скролла на телефонах */
+    overflow-x: hidden;
+    /* iOS: не масштабировать инпут при фокусе (16px минимум) */
+    -webkit-text-size-adjust: 100%;
   }
   ::selection {
     background: color-mix(in srgb, var(--color-pine) 18%, transparent);
@@ -43,6 +49,31 @@
   .accent-pine,
   input[type="range"] {
     accent-color: var(--color-pine);
+  }
+  /* Слайдеры удобно трогать пальцем */
+  input[type="range"] {
+    touch-action: pan-y;
+    min-height: 32px;
+  }
+  /* iOS Safari: убрать автоматические стили и «глоу» на тапах */
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  button,
+  [role="button"] {
+    cursor: pointer;
+    /* кнопки не выделяются при быстрых тапах */
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  /* Скрыть нативный «крестик» у type=search (двойной крестик выглядит сломано) */
+  input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
   }
 }
 
@@ -61,10 +92,12 @@
       box-shadow 0.25s,
       outline-color 0.25s;
   }
-  .card-hover:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px -12px rgb(28 56 51 / 0.25);
-    outline-color: color-mix(in srgb, var(--color-pine) 35%, transparent);
+  @media (hover: hover) {
+    .card-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px -12px rgb(28 56 51 / 0.25);
+      outline-color: color-mix(in srgb, var(--color-pine) 35%, transparent);
+    }
   }
 
   /* --- Кнопки --- */
@@ -84,7 +117,10 @@
       transform 0.15s,
       box-shadow 0.2s;
     user-select: none;
+    -webkit-user-select: none;
     outline-offset: 2px;
+    /* tap-target не меньше 44px на телефонах */
+    min-height: 44px;
   }
   .btn:focus-visible {
     outline: 2px solid var(--color-pine);
@@ -100,8 +136,10 @@
     background: var(--color-pine);
     color: #f5f1e8;
   }
-  .btn-primary:hover {
-    background: var(--color-pine-deep);
+  @media (hover: hover) {
+    .btn-primary:hover {
+      background: var(--color-pine-deep);
+    }
   }
   .btn-secondary {
     background: #fffdf8;
@@ -109,22 +147,28 @@
     outline: 1px solid color-mix(in srgb, var(--color-pine) 25%, transparent);
     outline-offset: -1px;
   }
-  .btn-secondary:hover {
-    background: color-mix(in srgb, var(--color-pine) 8%, #fffdf8);
+  @media (hover: hover) {
+    .btn-secondary:hover {
+      background: color-mix(in srgb, var(--color-pine) 8%, #fffdf8);
+    }
   }
   .btn-ghost {
     color: color-mix(in srgb, var(--color-ink) 70%, transparent);
   }
-  .btn-ghost:hover {
-    background: color-mix(in srgb, var(--color-ink) 6%, transparent);
-    color: var(--color-ink);
+  @media (hover: hover) {
+    .btn-ghost:hover {
+      background: color-mix(in srgb, var(--color-ink) 6%, transparent);
+      color: var(--color-ink);
+    }
   }
   .btn-accent {
     background: var(--color-clay);
     color: #fffdf8;
   }
-  .btn-accent:hover {
-    background: var(--color-clay-deep);
+  @media (hover: hover) {
+    .btn-accent:hover {
+      background: var(--color-clay-deep);
+    }
   }
 
   /* --- Поля ввода --- */
@@ -145,6 +189,13 @@
     color: var(--color-ink);
     outline: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
     transition: outline 0.2s;
+    min-height: 44px;
+    font-size: 16px; /* iOS не зумит поля с 16px */
+  }
+  @media (min-width: 640px) {
+    .input {
+      font-size: 0.875rem;
+    }
   }
   .input::placeholder {
     color: color-mix(in srgb, var(--color-ink) 35%, transparent);
@@ -198,6 +249,12 @@
       outline-color 0.2s,
       transform 0.15s;
     user-select: none;
+    -webkit-user-select: none;
+    /* tap-target: чип тоже должен легко ловить тап */
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
   }
   .chip:active {
     transform: scale(0.97);
@@ -206,14 +263,23 @@
     background: #fffdf8;
     color: color-mix(in srgb, var(--color-ink) 75%, transparent);
   }
-  .chip-off:hover {
-    outline-color: var(--color-pine);
-    color: var(--color-pine);
+  @media (hover: hover) {
+    .chip-off:hover {
+      outline-color: var(--color-pine);
+      color: var(--color-pine);
+    }
   }
   .chip-on {
     background: var(--color-pine);
     color: #f5f1e8;
     outline-color: var(--color-pine);
+  }
+  /* Выбранные майоры — мох */
+  .chip-on.is-major,
+  .is-major {
+    background: var(--color-moss);
+    color: #fffdf8;
+    outline-color: var(--color-moss);
   }
 
   /* --- Прочее --- */
@@ -250,31 +316,16 @@
 .anim-rise {
   animation: qadam-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
-.anim-rise-1 {
-  animation-delay: 0.05s;
-}
-.anim-rise-2 {
-  animation-delay: 0.12s;
-}
-.anim-rise-3 {
-  animation-delay: 0.2s;
-}
-.anim-rise-4 {
-  animation-delay: 0.28s;
-}
-.anim-rise-5 {
-  animation-delay: 0.36s;
-}
+.anim-rise-1 { animation-delay: 0.05s; }
+.anim-rise-2 { animation-delay: 0.12s; }
+.anim-rise-3 { animation-delay: 0.2s; }
+.anim-rise-4 { animation-delay: 0.28s; }
+.anim-rise-5 { animation-delay: 0.36s; }
 
 /* Мягкое свечение для «следующего шага» */
 @keyframes qadam-glow {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 rgb(176 89 47 / 0.15);
-  }
-  50% {
-    box-shadow: 0 0 0 6px rgb(176 89 47 / 0.08);
-  }
+  0%, 100% { box-shadow: 0 0 0 0 rgb(176 89 47 / 0.15); }
+  50% { box-shadow: 0 0 0 6px rgb(176 89 47 / 0.08); }
 }
 .anim-glow {
   animation: qadam-glow 3s ease-in-out infinite;
@@ -282,15 +333,9 @@
 
 /* Счётчик XP: подпрыгивание при начислении */
 @keyframes qadam-pop {
-  0% {
-    transform: scale(1);
-  }
-  40% {
-    transform: scale(1.18);
-  }
-  100% {
-    transform: scale(1);
-  }
+  0% { transform: scale(1); }
+  40% { transform: scale(1.18); }
+  100% { transform: scale(1); }
 }
 .anim-pop {
   animation: qadam-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -303,16 +348,41 @@
 
 /* Логотип: знак шага мягко «дышит» */
 @keyframes qadam-breathe {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-2px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
 }
 .anim-breathe {
   animation: qadam-breathe 4s ease-in-out infinite;
+}
+
+/* «Думающий» индикатор: три точки волной */
+@keyframes qadam-dot {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+  40% { transform: translateY(-4px); opacity: 1; }
+}
+.anim-dot {
+  animation: qadam-dot 1.2s ease-in-out infinite;
+}
+.anim-dot-2 { animation-delay: 0.15s; }
+.anim-dot-3 { animation-delay: 0.3s; }
+
+/* Развёртывание фаз анализа */
+@keyframes qadam-expand {
+  from { opacity: 0; max-height: 0; transform: translateY(-4px); }
+  to { opacity: 1; max-height: 200px; transform: translateY(0); }
+}
+.anim-expand {
+  overflow: hidden;
+  animation: qadam-expand 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Всплывающий квиз при загрузке */
+@keyframes qadam-quiz {
+  from { opacity: 0; transform: translateY(14px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.anim-quiz {
+  animation: qadam-quiz 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 /* Уважение к prefers-reduced-motion */
@@ -320,7 +390,10 @@
   .anim-rise,
   .anim-glow,
   .anim-pop,
-  .anim-breathe {
+  .anim-breathe,
+  .anim-dot,
+  .anim-expand,
+  .anim-quiz {
     animation: none;
   }
   .anim-progress {
@@ -328,5 +401,26 @@
   }
   html {
     scroll-behavior: auto;
+  }
+}
+
+/* ---------- Печать плана (экспорт в PDF через браузер) ---------- */
+@media print {
+  body {
+    background: #fff !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-page {
+    box-shadow: none !important;
+    outline: none !important;
+    border-radius: 0 !important;
+  }
+  .print-break {
+    break-inside: avoid;
+  }
+  a[href]::after {
+    content: "";
   }
 }

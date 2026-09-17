@@ -14,7 +14,7 @@ import {
   useReducer,
   type ReactNode,
 } from "react";
-import type { Profile, SubjectId } from "@/types";
+import type { MajorId, Profile, SubjectId } from "@/types";
 
 const STORAGE_KEY = "qadam.profile.v1";
 
@@ -23,12 +23,16 @@ export const DEFAULT_PROFILE: Profile = {
   city: "almaty",
   interests: [],
   strengths: {},
+  desiredMajors: [],
   studyLanguage: "ru",
   budgetPerYearTenge: 1_000_000,
+  budgetAny: false,
   needsDorm: false,
   countries: "kz",
   plannedExams: ["ent"],
   entEstimate: null,
+  ieltsEstimate: null,
+  satEstimate: null,
   targetYear: new Date().getFullYear() + 1,
   nextActionDoneAt: null,
   doneSteps: [],
@@ -41,11 +45,12 @@ export function isProfileComplete(p: Profile): boolean {
   return p.interests.length > 0 && p.entEstimate !== null;
 }
 
-/** Валидация профиля: возвращает ошибки по полям */
+/** Валидация профиля: возвращает ошибки по полям (ru — язык админки по умолчанию) */
 export function validateProfile(p: Profile): Partial<Record<keyof Profile, string>> {
   const errors: Partial<Record<keyof Profile, string>> = {};
   if (p.interests.length === 0) errors.interests = "Выберите хотя бы один интерес";
   if (p.interests.length > 4) errors.interests = "Максимум 4 интереса";
+  if ((p.desiredMajors?.length ?? 0) > 5) errors.desiredMajors = "Максимум 5 специальностей";
   if (p.entEstimate !== null && (p.entEstimate < 50 || p.entEstimate > 140))
     errors.entEstimate = "Балл должен быть от 50 до 140";
   if (p.budgetPerYearTenge < 0) errors.budgetPerYearTenge = "Бюджет не может быть отрицательным";
@@ -57,6 +62,7 @@ type Action =
   | { type: "patch"; patch: Partial<Profile> }
   | { type: "toggleInterest"; subject: SubjectId }
   | { type: "setStrength"; subject: SubjectId; value: number }
+  | { type: "toggleMajor"; major: MajorId }
   | { type: "toggleExam"; exam: "ent" | "ielts" | "sat" }
   | { type: "reset" };
 
@@ -69,11 +75,9 @@ function reducer(state: Profile, action: Action): Profile {
     case "toggleInterest": {
       const has = state.interests.includes(action.subject);
       if (has) {
+        // Разрешаем снимать даже последний интерес — анкета валидируется
+        // на шаге навигации (появится ошибка, если продолжить без интересов).
         const interests = state.interests.filter((s) => s !== action.subject);
-        if (interests.length === 0) {
-          // нельзя остаться без интересов — игнорируем снятие последнего
-          return state;
-        }
         const strengths = { ...state.strengths };
         delete strengths[action.subject];
         return { ...state, interests, strengths };
@@ -90,6 +94,13 @@ function reducer(state: Profile, action: Action): Profile {
     }
     case "setStrength":
       return { ...state, strengths: { ...state.strengths, [action.subject]: action.value } };
+    case "toggleMajor": {
+      const cur = state.desiredMajors ?? [];
+      const has = cur.includes(action.major);
+      if (has) return { ...state, desiredMajors: cur.filter((m) => m !== action.major) };
+      if (cur.length >= 5) return state; // лимит 5
+      return { ...state, desiredMajors: [...cur, action.major] };
+    }
     case "toggleExam": {
       const has = state.plannedExams.includes(action.exam);
       if (has && state.plannedExams.length === 1) return state; // хотя бы один экзамен
@@ -114,6 +125,7 @@ interface ProfileContextValue {
   update: (patch: Partial<Profile>) => void;
   toggleInterest: (subject: SubjectId) => void;
   setStrength: (subject: SubjectId, value: number) => void;
+  toggleMajor: (major: MajorId) => void;
   toggleExam: (exam: "ent" | "ielts" | "sat") => void;
   reset: () => void;
   complete: boolean;
@@ -134,7 +146,12 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         // Мягкая валидация: merges с дефолтом, чтобы старые версии данных не ломали UI
         dispatch({
           type: "hydrate",
-          profile: { ...DEFAULT_PROFILE, ...parsed, strengths: parsed.strengths ?? {} },
+          profile: {
+            ...DEFAULT_PROFILE,
+            ...parsed,
+            strengths: parsed.strengths ?? {},
+            desiredMajors: parsed.desiredMajors ?? [],
+          },
         });
       }
     } catch {
@@ -162,6 +179,10 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     (subject: SubjectId, value: number) => dispatch({ type: "setStrength", subject, value }),
     [],
   );
+  const toggleMajor = useCallback(
+    (major: MajorId) => dispatch({ type: "toggleMajor", major }),
+    [],
+  );
   const toggleExam = useCallback(
     (exam: "ent" | "ielts" | "sat") => dispatch({ type: "toggleExam", exam }),
     [],
@@ -175,11 +196,12 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
       update,
       toggleInterest,
       setStrength,
+      toggleMajor,
       toggleExam,
       reset,
       complete: isProfileComplete(profile),
     }),
-    [profile, hydrated, update, toggleInterest, setStrength, toggleExam, reset],
+    [profile, hydrated, update, toggleInterest, setStrength, toggleMajor, toggleExam, reset],
   );
 
   return <ProfileContext.Provider value={value}>{children}</ProfileContext.Provider>;

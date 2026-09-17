@@ -9,6 +9,7 @@
 import type { Lang } from "@/i18n/dictionaries";
 import {
   reasonBudget,
+  reasonBudgetAny,
   reasonCityAny,
   reasonCityMatch,
   reasonCityOk,
@@ -16,8 +17,10 @@ import {
   reasonEntAbove,
   reasonEntClose,
   reasonLanguage,
+  reasonMajorMatch,
   reasonSubjects,
   reasonSubjectsPartial,
+  reasonUniRating,
   warnBudgetFar,
   warnBudgetSlightly,
   warnEntBelow,
@@ -26,7 +29,7 @@ import {
   warnRelocate,
 } from "@/i18n/engine";
 import type { Profile, Program, Recommendation, SubjectId } from "@/types";
-import { getUniversity, PROGRAMS } from "@/lib/data";
+import { getUniversity, PROGRAMS, UNIVERSITIES } from "@/lib/data";
 
 /** Пересечение введённых интересов и сильных предметов с предметами поступления */
 export function subjectOverlap(program: Program, profile: Profile): SubjectId[] {
@@ -40,6 +43,8 @@ export function subjectOverlap(program: Program, profile: Profile): SubjectId[] 
 }
 
 function budgetFactor(program: Program, profile: Profile) {
+  // «Бюджет не важен»: стоимостной фактор нейтрален, предупреждений нет
+  if (profile.budgetAny) return { ratio: 0.8, above: false };
   const { budgetPerYearTenge: b } = profile;
   const t = program.tuitionPerYearTenge;
   if (t <= b) return { ratio: 1, above: false };
@@ -51,6 +56,10 @@ function budgetFactor(program: Program, profile: Profile) {
 export function scoreProgram(profile: Profile, program: Program, lang: Lang = "ru") {
   const reasons: string[] = [];
   const warnings: string[] = [];
+
+  // --- Желаемая специальность: сильный сигнал (+14) ---
+  const majorMatch = (profile.desiredMajors ?? []).includes(program.majorId);
+  if (majorMatch) reasons.push(reasonMajorMatch(lang));
 
   // --- Предметы (30) ---
   const overlap = subjectOverlap(program, profile);
@@ -67,7 +76,9 @@ export function scoreProgram(profile: Profile, program: Program, lang: Lang = "r
   // --- Бюджет (25) ---
   const { ratio: budRatio, above } = budgetFactor(program, profile);
   const budScore = budRatio * 25;
-  if (!above) {
+  if (profile.budgetAny) {
+    reasons.push(reasonBudgetAny(program.tuitionPerYearTenge, lang));
+  } else if (!above) {
     reasons.push(reasonBudget(program.tuitionPerYearTenge, profile.budgetPerYearTenge, lang));
   } else if (budRatio > 0) {
     warnings.push(
@@ -126,32 +137,36 @@ export function scoreProgram(profile: Profile, program: Program, lang: Lang = "r
   const langScore = langOk ? 10 : 0;
   if (langOk) reasons.push(reasonLanguage(lang));
 
+  // --- Рейтинг вуза (до +5) ---
+  const rating = getUniversity(program.universityId).rating ?? 0;
+  const ratingScore = Math.max(0, (rating - 3.5) * 3.2); // 5.0 → +4.8, 4.5 → +3.2
+  if (rating >= 4.5) reasons.push(reasonUniRating(rating, lang));
+
   // --- Приоритеты пользователя (бонус до +12, штраф за нижние позиции) ---
   const prio = (profile.priority ?? ["cost", "proximity", "ranking", "dorm"]) as string[];
   const pos = (id: string) => prio.indexOf(id);
   let prioBonus = 0;
-  // Стоимость: чем важнее, тем сильнее штраф за превышение бюджета
   if (pos("cost") >= 0) {
-    if (above) prioBonus -= (4 - pos("cost")) * 2;
+    if (above && !profile.budgetAny) prioBonus -= (4 - pos("cost")) * 2;
     else prioBonus += (4 - pos("cost")) * 2.5;
   }
-  // Близость к дому
   if (pos("proximity") >= 0) {
     if (profile.city === "any" || program.city === profile.city) prioBonus += (4 - pos("proximity")) * 1.5;
     else prioBonus -= (4 - pos("proximity")) * 1.5;
   }
-  // Сила программы: прокси — количество грантов и проходной балл
   if (pos("ranking") >= 0) {
     const strength =
       (program.grantsCount ?? 0) / 80 + (program.historicalPassingENT ?? 0) / 140;
     prioBonus += (4 - pos("ranking")) * 1.5 * Math.min(1.5, strength);
   }
-  // Общежитие
   if (pos("dorm") >= 0) {
     if (profile.needsDorm) prioBonus += program.dorm ? (4 - pos("dorm")) : -(4 - pos("dorm")) * 0.5;
-  }  prioBonus = Math.max(-12, Math.min(12, prioBonus));
+  }
+  prioBonus = Math.max(-12, Math.min(12, prioBonus));
 
-  const score = Math.round(subjScore + budScore + acadScore + formatScore + langScore + prioBonus);
+  const score = Math.round(
+    subjScore + budScore + acadScore + formatScore + langScore + ratingScore + prioBonus + (majorMatch ? 14 : 0),
+  );
 
   return { score: Math.max(0, Math.min(100, score)), reasons, warnings, langOk };
 }
@@ -180,4 +195,9 @@ export function getRecommendations(profile: Profile, lang: Lang = "ru", limit = 
     reasons: reasons.slice(0, 4),
     warnings,
   }));
+}
+
+/** Сколько всего программ участвует в подборе (для индикатора «проверено N программ») */
+export function catalogSize(): { universities: number; programs: number } {
+  return { universities: UNIVERSITIES.length, programs: PROGRAMS.length };
 }

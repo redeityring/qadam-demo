@@ -10,7 +10,7 @@ import { useMemo } from "react";
 import { JourneyLayout } from "@/components/JourneyLayout";
 import { useProfile } from "@/context/ProfileContext";
 import { useLang } from "@/i18n/LanguageContext";
-import { CITY_L, SUBJECT_L } from "@/i18n/engine";
+import { CITY_L, MAJOR_L, SUBJECT_L } from "@/i18n/engine";
 import { getRecommendations, scoreProgram } from "@/lib/engine/recommend";
 import { formatTenge } from "@/lib/constants";
 
@@ -78,7 +78,7 @@ export default function ComparePage() {
                   <th className="p-4 font-semibold text-ink/40">{t.param}</th>
                   {selected.map((r) => (
                     <th key={r.program.id} className="p-4">
-                      <p className="font-bold text-ink">{r.program.title}</p>
+                      <p className="font-bold text-ink">{MAJOR_L[r.program.majorId][lang]}</p>
                       <p className="muted text-xs">{r.university.shortName ?? r.university.name}</p>
                     </th>
                   ))}
@@ -179,7 +179,7 @@ export default function ComparePage() {
               const { score } = scoreProgram(profile, r.program, lang);
               return (
                 <div key={r.program.id} className="card p-5">
-                  <h2 className="font-bold text-ink">{r.program.title}</h2>
+                  <h2 className="font-bold text-ink">{MAJOR_L[r.program.majorId][lang]}</h2>
                   <p className="muted text-xs">{r.university.shortName ?? r.university.name}</p>
                   <dl className="mt-3 space-y-2 text-sm">
                     {[

@@ -70,7 +70,7 @@ export default function OpengraphImage() {
             Q
           </div>
           <div style={{ fontSize: 30, fontWeight: 800, color: "#22251f", display: "flex" }}>
-            Qadam<span style={{ color: "#b0592f" }}>.kz</span>
+            Qadam
           </div>
         </div>
 

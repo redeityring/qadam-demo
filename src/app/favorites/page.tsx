@@ -9,7 +9,7 @@ import { useMemo } from "react";
 import { JourneyLayout } from "@/components/JourneyLayout";
 import { useProfile } from "@/context/ProfileContext";
 import { useLang } from "@/i18n/LanguageContext";
-import { SUBJECT_L } from "@/i18n/engine";
+import { MAJOR_L, SUBJECT_L } from "@/i18n/engine";
 import { formatTenge } from "@/lib/constants";
 import { getUniversity, PROGRAMS } from "@/lib/data";
 
@@ -51,7 +51,7 @@ export default function FavoritesPage() {
             return (
               <div key={p.id} className="card flex items-center justify-between gap-3 p-4">
                 <div className="min-w-0">
-                  <p className="font-bold text-ink">{p.title}</p>
+                  <p className="font-bold text-ink">{MAJOR_L[p.majorId][lang]}</p>
                   <p className="muted text-xs">
                     {uni.shortName ?? uni.name} · {formatTenge(p.tuitionPerYearTenge, lang)} ·{" "}
                     {p.entrySubjects.map((s) => SUBJECT_L[s][lang]).join(" + ")}
