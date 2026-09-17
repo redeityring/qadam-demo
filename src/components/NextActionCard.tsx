@@ -7,6 +7,7 @@
 
 import Link from "next/link";
 import { useProfile } from "@/context/ProfileContext";
+import { useLang } from "@/i18n/LanguageContext";
 
 export interface NextAction {
   title: string;
@@ -15,42 +16,9 @@ export interface NextAction {
   cta: string;
 }
 
-/** Ближайшее действие по состоянию пути (позже дополняется пунктами roadmap) */
-export function computeNextAction(args: {
-  complete: boolean;
-  doneCount: number;
-  totalSteps: number;
-  allDone: boolean;
-}): NextAction {
-  const { complete, doneCount, totalSteps, allDone } = args;
-  if (!complete) {
-    return {
-      title: "Завершите профиль",
-      description:
-        "Осталось указать интересы и прогноз балла ЕНТ — это откроет рекомендации и план.",
-      href: "/profile",
-      cta: "Заполнить анкету",
-    };
-  }
-  if (allDone) {
-    return {
-      title: "Маршрут пройден — поддерживайте план",
-      description:
-        "Все шаги отмечены выполненными. Вернитесь к анкете, если изменились цели или бюджет.",
-      href: "/profile",
-      cta: "Обновить профиль",
-    };
-  }
-  return {
-    title: `Шаг ${doneCount + 1} из ${totalSteps}`,
-    description: "Отметьте выполненные пункты в плане — маршрут пересчитается автоматически.",
-    href: "/roadmap",
-    cta: "Открыть план",
-  };
-}
-
 export function NextActionCard({ action }: { action: NextAction }) {
   const { profile, update } = useProfile();
+  const { t } = useLang();
   const lastSeen = profile.nextActionDoneAt;
   const isDone = action.title === lastSeen;
 
@@ -60,17 +28,15 @@ export function NextActionCard({ action }: { action: NextAction }) {
 
   return (
     <aside
-      className={`card border-l-4 p-4 sm:p-5 ${
-        isDone ? "border-l-emerald-500" : "border-l-amber-500"
+      className={`card anim-glow border-l-4 p-4 sm:p-5 ${
+        isDone ? "border-l-success" : "border-l-clay"
       }`}
-      aria-label="Следующее действие"
+      aria-label={t.nextStep}
     >
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <p className="text-xs font-bold tracking-wide text-amber-600 uppercase">
-            Следующий шаг
-          </p>
-          <p className="mt-0.5 font-bold text-slate-900">{action.title}</p>
+          <p className="text-xs font-bold tracking-wide text-clay uppercase">{t.nextStep}</p>
+          <p className="mt-0.5 font-bold text-ink">{action.title}</p>
           <p className="muted mt-0.5">{action.description}</p>
         </div>
         <div className="flex shrink-0 items-center gap-2">
@@ -80,7 +46,7 @@ export function NextActionCard({ action }: { action: NextAction }) {
             className={`btn ${isDone ? "btn-secondary" : "btn-ghost"} !px-3 !py-2 text-xs`}
             aria-pressed={isDone}
           >
-            {isDone ? "✓ Отмечено" : "Отметить"}
+            {isDone ? `✓ ${t.marked}` : t.markDone}
           </button>
           <Link href={action.href} className="btn btn-primary !px-4 !py-2 text-xs">
             {action.cta}

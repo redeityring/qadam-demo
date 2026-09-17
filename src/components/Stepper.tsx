@@ -9,6 +9,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { STEP_INDEX, STEPS } from "@/lib/constants";
 import { useProfile } from "@/context/ProfileContext";
+import { useLang } from "@/i18n/LanguageContext";
 
 /** Путь → id этапа (для подсветки текущего шага) */
 function stepIdForPathname(pathname: string) {
@@ -20,12 +21,15 @@ function stepIdForPathname(pathname: string) {
   if (clean.startsWith("/results")) return "results" as const;
   if (clean.startsWith("/compare")) return "compare" as const;
   if (clean.startsWith("/roadmap")) return "roadmap" as const;
+  if (clean.startsWith("/favorites") || clean.startsWith("/calendar") || clean.startsWith("/scholarships"))
+    return "compare" as const;
   return "entry" as const;
 }
 
 export function Stepper() {
   const pathname = usePathname();
   const { complete } = useProfile();
+  const { lang, t } = useLang();
   const current = stepIdForPathname(pathname);
   const currentIdx = STEP_INDEX[current];
 
@@ -34,12 +38,13 @@ export function Stepper() {
     idx < currentIdx || (complete && (id === "diagnostics" || id === "results"));
 
   return (
-    <nav aria-label="Этапы пути" className="w-full">
+    <nav aria-label="Journey steps" className="w-full">
       {/* Десктоп: полный степпер */}
       <ol className="hidden items-center gap-1 md:flex">
         {STEPS.map((step, idx) => {
           const state = idx === currentIdx ? "current" : isDone(idx, step.id) ? "done" : "todo";
           const clickable = idx <= currentIdx || complete;
+          const label = step.label[lang];
           return (
             <li key={step.id} className="flex flex-1 items-center gap-1 last:flex-none">
               {clickable ? (
@@ -48,34 +53,34 @@ export function Stepper() {
                   aria-current={state === "current" ? "step" : undefined}
                   className={`flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold transition ${
                     state === "current"
-                      ? "bg-indigo-600 text-white"
+                      ? "bg-pine text-paper"
                       : state === "done"
-                        ? "text-indigo-700 hover:bg-indigo-50"
-                        : "text-slate-400 hover:bg-slate-100"
+                        ? "text-pine hover:bg-pine/10"
+                        : "text-ink/40 hover:bg-ink/5"
                   }`}
                 >
                   <span
                     className={`flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold ${
                       state === "current"
-                        ? "bg-white text-indigo-700"
+                        ? "bg-paper text-pine"
                         : state === "done"
-                          ? "bg-indigo-100"
-                          : "bg-slate-200 text-slate-500"
+                          ? "bg-moss/30 text-pine"
+                          : "bg-ink/8 text-ink/40"
                     }`}
                   >
                     {state === "done" ? "✓" : idx + 1}
                   </span>
-                  {step.label}
+                  {label}
                 </Link>
               ) : (
-                <span className="flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold text-slate-400">
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-100 text-[10px] font-bold text-slate-400">
+                <span className="flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold text-ink/40">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-ink/8 text-[10px] font-bold text-ink/40">
                     {idx + 1}
                   </span>
-                  {step.label}
+                  {label}
                 </span>
               )}
-              {idx < STEPS.length - 1 && <span className="h-px flex-1 bg-slate-200" />}
+              {idx < STEPS.length - 1 && <span className="h-px flex-1 bg-ink/10" />}
             </li>
           );
         })}
@@ -84,16 +89,16 @@ export function Stepper() {
       {/* Мобильный: компактная полоса прогресса */}
       <div className="md:hidden">
         <div className="mb-1.5 flex items-center justify-between text-xs font-semibold">
-          <span className="text-indigo-700">
-            Шаг {currentIdx + 1} из {STEPS.length}: {STEPS[currentIdx].label}
+          <span className="text-pine">
+            {t.headerSteps} {currentIdx + 1} {t.headerOf} {STEPS.length}: {STEPS[currentIdx].label[lang]}
           </span>
-          <span className="text-slate-400">
+          <span className="text-ink/40">
             {Math.round(((currentIdx + 1) / STEPS.length) * 100)}%
           </span>
         </div>
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-ink/10">
           <div
-            className="h-full rounded-full bg-indigo-600 transition-all"
+            className="anim-progress h-full rounded-full bg-pine"
             style={{ width: `${((currentIdx + 1) / STEPS.length) * 100}%` }}
           />
         </div>

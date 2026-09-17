@@ -2,24 +2,31 @@
 
 /**
  * Этап 4 кейса: Рекомендации. Минимум три варианта с объяснением
- * «почему подходит», бейджами источников и выбором для сравнения.
+ * «почему подходит», бейджами источников, избранным и Ask AI.
  */
 
 import Link from "next/link";
 import { useMemo } from "react";
 import { JourneyLayout } from "@/components/JourneyLayout";
+import { AskAiPanel } from "@/components/AskAiPanel";
 import { NextActionCard } from "@/components/NextActionCard";
 import { useProfile } from "@/context/ProfileContext";
+import { useLang } from "@/i18n/LanguageContext";
+import { SUBJECT_L } from "@/i18n/engine";
 import { getRecommendations } from "@/lib/engine/recommend";
-import { formatTenge, SUBJECT_LABEL } from "@/lib/constants";
+import { formatTenge } from "@/lib/constants";
 import { firstOpenStep, getRoadmap } from "@/lib/engine/roadmap";
 
 export default function ResultsPage() {
   const { profile, complete, update, hydrated } = useProfile();
+  const { lang, t } = useLang();
 
   // Чистая проекция профиля: любые изменения анкеты мгновенно меняют выдачу
-  const recommendations = useMemo(() => getRecommendations(profile), [profile]);
-  const roadmap = useMemo(() => getRoadmap(profile), [profile]);
+  const recommendations = useMemo(
+    () => getRecommendations(profile, lang),
+    [profile, lang],
+  );
+  const roadmap = useMemo(() => getRoadmap(profile, lang), [profile, lang]);
   const openStep = useMemo(
     () => firstOpenStep(roadmap, profile.doneSteps ?? []),
     [roadmap, profile.doneSteps],
@@ -30,7 +37,7 @@ export default function ResultsPage() {
       <JourneyLayout>
         <div className="space-y-4" aria-busy="true">
           {[0, 1, 2].map((i) => (
-            <div key={i} className="card h-40 animate-pulse bg-slate-100" />
+            <div key={i} className="card h-40 animate-pulse bg-ink/5" />
           ))}
         </div>
       </JourneyLayout>
@@ -41,10 +48,10 @@ export default function ResultsPage() {
     return (
       <JourneyLayout>
         <div className="card p-6 text-center">
-          <h1 className="section-title">Сначала заполните профиль</h1>
-          <p className="muted mt-2">Рекомендации строятся из ваших интересов, бюджета и балла ЕНТ.</p>
+          <h1 className="section-title">{t.resultsTitle}</h1>
+          <p className="muted mt-2">{t.diagEmptyD}</p>
           <Link href="/profile" className="btn btn-primary mt-4">
-            Заполнить анкету →
+            {t.fillProfile} →
           </Link>
         </div>
       </JourneyLayout>
@@ -53,19 +60,26 @@ export default function ResultsPage() {
 
   function toggleCompare(id: string) {
     const current = profile.compareIds ?? [];
-    const next = current.includes(id)
-      ? current.filter((c) => c !== id)
-      : [...current, id].slice(-3);
+    const next = current.includes(id) ? current.filter((c) => c !== id) : [...current, id].slice(-3);
     update({ compareIds: next });
   }
 
+  function toggleFavorite(id: string) {
+    const current = profile.favoriteIds ?? [];
+    const next = current.includes(id)
+      ? current.filter((c) => c !== id)
+      : [...current, id].slice(-12);
+    update({ favoriteIds: next });
+  }
+
+  const favCount = profile.favoriteIds?.length ?? 0;
+
   return (
     <JourneyLayout wide>
-      <div className="mb-4">
-        <h1 className="section-title">Ваши рекомендации</h1>
+      <div className="anim-rise mb-4">
+        <h1 className="section-title">{t.resultsTitle}</h1>
         <p className="muted mt-1">
-          Найдено {recommendations.length} вариантов. Совместимость — это насколько программа
-          совпадает с вашим профилем, а не шанс поступления.
+          {t.resultsSubA} {recommendations.length} {t.resultsSubB}
         </p>
       </div>
 
@@ -76,111 +90,123 @@ export default function ResultsPage() {
                 title: openStep.title,
                 description: openStep.why,
                 href: "/roadmap",
-                cta: "Открыть план",
+                cta: t.openPlan,
               }
             : {
-                title: "Маршрут пройден — поддерживайте план",
-                description: "Все шаги отмечены выполненными. Измените профиль, если цели поменялись.",
+                title: t.journeyDoneT,
+                description: t.journeyDoneD,
                 href: "/profile",
-                cta: "Обновить профиль",
+                cta: t.journeyDoneCta,
               }
         }
       />
 
+      <AskAiPanel />
+
       {/* Изменить вводные — проверка жюри «изменил → изменилось» */}
-      <div className="card mt-4 flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm font-semibold text-slate-700">
-          Измените вводные — рекомендации пересчитаются мгновенно:
-        </p>
+      <div className="card anim-rise anim-rise-2 mt-4 flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm font-semibold text-ink/80">{t.recalcsHint}</p>
         <div className="flex flex-wrap gap-2">
           <Link href="/profile" className="btn btn-secondary !px-3 !py-2 text-xs">
-            Изменить бюджет / интересы
+            {t.changeInputs}
           </Link>
           <Link href="/diagnostics" className="btn btn-ghost !px-3 !py-2 text-xs">
-            Диагностика
+            {t.toDiagnostics}
           </Link>
         </div>
-        <div className="text-xs text-slate-400">
-          В сравнении: {profile.compareIds?.length ?? 0} / 3
+        <div className="flex items-center gap-2 text-xs text-ink/40">
+          <span>
+            {t.inCompare} {profile.compareIds?.length ?? 0} / 3
+          </span>
+          <span>·</span>
+          <Link href="/favorites" className="text-pine underline-offset-2 hover:underline">
+            ★ {favCount}
+          </Link>
         </div>
       </div>
 
       {/* Карточки рекомендаций */}
       {recommendations.length === 0 ? (
-        <div className="card mt-4 p-6 text-center">
+        <div className="card anim-rise mt-4 p-6 text-center">
           <p className="text-3xl">🔍</p>
-          <h2 className="mt-2 font-bold">Подходящих вариантов не нашлось</h2>
-          <p className="muted mt-1">
-            Попробуйте увеличить бюджет или изменить язык обучения — и рекомендации появятся.
-          </p>
+          <h2 className="mt-2 font-bold">{t.noResultsT}</h2>
+          <p className="muted mt-1">{t.noResultsD}</p>
           <Link href="/profile" className="btn btn-primary mt-4">
-            Изменить вводные
+            {t.changeInputs2}
           </Link>
         </div>
       ) : (
         <div className="mt-4 grid gap-4 lg:grid-cols-2">
           {recommendations.map((r, i) => {
             const inCompare = (profile.compareIds ?? []).includes(r.program.id);
+            const inFav = (profile.favoriteIds ?? []).includes(r.program.id);
             return (
-              <article key={r.program.id} className="card card-hover flex flex-col p-5">
+              <article
+                key={r.program.id}
+                className={`card card-hover anim-rise p-5 ${i < 5 ? `anim-rise-${i + 1}` : ""}`}
+              >
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-xs font-bold text-indigo-600">
-                      {i === 0 ? "Топ-вариант" : `Вариант №${i + 1}`} · {r.university.shortName ?? r.university.name}
+                    <p className="text-xs font-bold text-pine">
+                      {i === 0 ? t.topPick : `${t.optionN}${i + 1}`} ·{" "}
+                      {r.university.shortName ?? r.university.name}
                     </p>
-                    <h2 className="mt-0.5 font-bold text-slate-900">{r.program.title}</h2>
+                    <h2 className="mt-0.5 font-bold text-ink">{r.program.title}</h2>
                     <p className="muted mt-0.5 text-xs">{r.university.name}</p>
                   </div>
                   {/* Кольцо совместимости */}
                   <div className="relative flex h-14 w-14 shrink-0 items-center justify-center">
                     <svg viewBox="0 0 36 36" className="h-14 w-14 -rotate-90">
-                      <circle cx="18" cy="18" r="15.5" fill="none" stroke="#e2e8f0" strokeWidth="4" />
+                      <circle cx="18" cy="18" r="15.5" fill="none" stroke="#e7e0d2" strokeWidth="4" />
                       <circle
-                        cx="18" cy="18" r="15.5" fill="none"
-                        stroke={r.score >= 70 ? "#10b981" : r.score >= 45 ? "#f59e0b" : "#ef4444"}
+                        cx="18"
+                        cy="18"
+                        r="15.5"
+                        fill="none"
+                        stroke={r.score >= 70 ? "var(--color-success)" : r.score >= 45 ? "var(--color-warn)" : "var(--color-danger)"}
                         strokeWidth="4"
                         strokeDasharray={`${(r.score / 100) * 97.4} 97.4`}
                         strokeLinecap="round"
                       />
                     </svg>
-                    <span className="absolute text-sm font-extrabold text-slate-900">{r.score}</span>
+                    <span className="absolute text-sm font-extrabold text-ink">{r.score}</span>
                   </div>
                 </div>
 
                 {/* Ключевые параметры */}
                 <div className="mt-3 flex flex-wrap gap-2 text-xs">
-                  <span className="badge bg-slate-100 text-slate-700">
-                    {formatTenge(r.program.tuitionPerYearTenge)}/год
+                  <span className="badge bg-ink/5 text-ink/70">
+                    {formatTenge(r.program.tuitionPerYearTenge, lang)}/{lang === "en" ? "yr" : lang === "kk" ? "жыл" : "год"}
                   </span>
                   {r.program.historicalPassingENT != null && (
-                    <span className="badge bg-slate-100 text-slate-700">
-                      Проходной {r.program.historicalPassingENT}*
+                    <span className="badge bg-ink/5 text-ink/70">
+                      {lang === "en" ? "Passing" : lang === "kk" ? "Өту" : "Проходной"} {r.program.historicalPassingENT}*
                     </span>
                   )}
                   {r.program.grantsCount != null && (
-                    <span className="badge bg-slate-100 text-slate-700">
-                      Грантов: {r.program.grantsCount}
+                    <span className="badge bg-ink/5 text-ink/70">
+                      {lang === "en" ? "Grants" : lang === "kk" ? "Грант" : "Грантов"}: {r.program.grantsCount}
                     </span>
                   )}
-                  <span className="badge bg-slate-100 text-slate-700">
-                    {r.program.entrySubjects.map((s) => SUBJECT_LABEL[s]).join(" + ")}
+                  <span className="badge bg-ink/5 text-ink/70">
+                    {r.program.entrySubjects.map((s) => SUBJECT_L[s][lang]).join(" + ")}
                   </span>
                 </div>
 
                 {/* Почему подходит */}
-                <div className="mt-3 rounded-xl bg-indigo-50/60 p-3">
-                  <p className="text-xs font-bold text-indigo-700">Почему подходит</p>
+                <div className="mt-3 rounded-xl bg-pine/5 p-3">
+                  <p className="text-xs font-bold text-pine">{t.whyFits}</p>
                   <ul className="mt-1 space-y-1">
                     {r.reasons.map((reason) => (
-                      <li key={reason} className="flex gap-1.5 text-xs text-slate-700">
-                        <span className="text-indigo-500">•</span> {reason}
+                      <li key={reason} className="flex gap-1.5 text-xs text-ink/80">
+                        <span className="text-moss">•</span> {reason}
                       </li>
                     ))}
                   </ul>
                   {r.warnings.length > 0 && (
                     <ul className="mt-2 space-y-1">
                       {r.warnings.map((w) => (
-                        <li key={w} className="flex gap-1.5 text-xs text-amber-700">
+                        <li key={w} className="flex gap-1.5 text-xs text-clay-deep">
                           <span>⚠</span> {w}
                         </li>
                       ))}
@@ -210,14 +236,22 @@ export default function ResultsPage() {
                 </div>
 
                 {/* Действия */}
-                <div className="mt-4 flex items-center gap-2 border-t border-slate-100 pt-3">
+                <div className="mt-4 flex items-center gap-2 border-t border-ink/8 pt-3">
                   <button
                     type="button"
                     onClick={() => toggleCompare(r.program.id)}
                     aria-pressed={inCompare}
                     className={`btn ${inCompare ? "btn-primary" : "btn-secondary"} !px-3 !py-2 text-xs`}
                   >
-                    {inCompare ? "✓ В сравнении" : "⚖ Сравнить"}
+                    {inCompare ? `✓ ${t.inCompareBtn}` : `⚖ ${t.compareBtn}`}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => toggleFavorite(r.program.id)}
+                    aria-pressed={inFav}
+                    className={`btn ${inFav ? "btn-secondary text-clay" : "btn-ghost"} !px-3 !py-2 text-xs`}
+                  >
+                    {inFav ? `★ ${t.favBtnOn}` : `☆ ${t.favBtn}`}
                   </button>
                   <a
                     href={r.university.website}
@@ -225,7 +259,7 @@ export default function ResultsPage() {
                     rel="noreferrer"
                     className="btn btn-ghost !px-3 !py-2 text-xs"
                   >
-                    Сайт вуза ↗
+                    {t.uniSite} ↗
                   </a>
                 </div>
               </article>
@@ -234,15 +268,15 @@ export default function ResultsPage() {
         </div>
       )}
 
-      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-between">
+      <div className="anim-rise anim-rise-5 mt-6 flex flex-col gap-3 sm:flex-row sm:justify-between">
         <Link href="/diagnostics" className="btn btn-secondary">
-          ← Диагностика
+          ← {t.backToDiag}
         </Link>
         <Link
           href="/compare"
           className={`btn ${(profile.compareIds?.length ?? 0) >= 2 ? "btn-primary" : "btn-secondary"}`}
         >
-          Сравнить выбранные ({profile.compareIds?.length ?? 0}) →
+          {t.toCompare} ({profile.compareIds?.length ?? 0}) →
         </Link>
       </div>
     </JourneyLayout>

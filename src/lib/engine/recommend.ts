@@ -1,14 +1,32 @@
 /**
  * Движок рекомендаций — чистые функции, детерминированный rule-based скоринг.
- * Каждое слагаемое оценки порождает объяснение человеческим языком.
+ * Каждое слагаемое оценки порождает объяснение человеческим языком (RU/KZ/EN).
  *
- * Веса (из плана): предметы 30 / бюджет 25 / академика 20 / формат 15 / язык 10.
+ * Веса: предметы 30 / бюджет 25 / академика 20 / формат 15 / язык 10.
  * Язык обучения — единственный хард-фильтр.
  */
 
+import type { Lang } from "@/i18n/dictionaries";
+import {
+  reasonBudget,
+  reasonCityAny,
+  reasonCityMatch,
+  reasonCityOk,
+  reasonDorm,
+  reasonEntAbove,
+  reasonEntClose,
+  reasonLanguage,
+  reasonSubjects,
+  reasonSubjectsPartial,
+  warnBudgetFar,
+  warnBudgetSlightly,
+  warnEntBelow,
+  warnEntFarBelow,
+  warnNoDorm,
+  warnRelocate,
+} from "@/i18n/engine";
 import type { Profile, Program, Recommendation, SubjectId } from "@/types";
 import { getUniversity, PROGRAMS } from "@/lib/data";
-import { formatTenge, SUBJECT_LABEL } from "@/lib/constants";
 
 /** Пересечение введённых интересов и сильных предметов с предметами поступления */
 export function subjectOverlap(program: Program, profile: Profile): SubjectId[] {
@@ -29,8 +47,8 @@ function budgetFactor(program: Program, profile: Profile) {
   return { ratio: 0, above: true };
 }
 
-/** Оценка совместимости 0..100 + объяснения */
-export function scoreProgram(profile: Profile, program: Program) {
+/** Оценка совместимости 0..100 + объяснения на выбранном языке */
+export function scoreProgram(profile: Profile, program: Program, lang: Lang = "ru") {
   const reasons: string[] = [];
   const warnings: string[] = [];
 
@@ -41,30 +59,22 @@ export function scoreProgram(profile: Profile, program: Program) {
     : 0;
   const subjScore = subjRatio * 30;
   if (overlap.length === program.entrySubjects.length && overlap.length > 0) {
-    reasons.push(
-      `Профильные предметы (${overlap.map((s) => SUBJECT_LABEL[s]).join(", ")}) совпадают с вашими интересами и сильными сторонами.`,
-    );
+    reasons.push(reasonSubjects(overlap, lang));
   } else if (overlap.length > 0) {
-    reasons.push(
-      `Часть предметов поступления (${overlap.map((s) => SUBJECT_LABEL[s]).join(", ")}) вам близка.`,
-    );
+    reasons.push(reasonSubjectsPartial(overlap, lang));
   }
 
-  // --- Бюджет (25) --- 
+  // --- Бюджет (25) ---
   const { ratio: budRatio, above } = budgetFactor(program, profile);
   const budScore = budRatio * 25;
   if (!above) {
-    reasons.push(
-      `${formatTenge(program.tuitionPerYearTenge)} в год — в вашем бюджете до ${formatTenge(profile.budgetPerYearTenge)}.`,
-    );
+    reasons.push(reasonBudget(program.tuitionPerYearTenge, profile.budgetPerYearTenge, lang));
   } else if (budRatio > 0) {
     warnings.push(
-      `Стоимость ${formatTenge(program.tuitionPerYearTenge)} немного выше бюджета (${formatTenge(profile.budgetPerYearTenge)}) — рассмотрите грант.`,
+      warnBudgetSlightly(program.tuitionPerYearTenge, profile.budgetPerYearTenge, lang),
     );
   } else {
-    warnings.push(
-      `Стоимость ${formatTenge(program.tuitionPerYearTenge)} заметно выше вашего бюджета (${formatTenge(profile.budgetPerYearTenge)}).`,
-    );
+    warnings.push(warnBudgetFar(program.tuitionPerYearTenge, profile.budgetPerYearTenge, lang));
   }
 
   // --- Академическая совместимость (20) ---
@@ -73,84 +83,101 @@ export function scoreProgram(profile: Profile, program: Program) {
     const gap = profile.entEstimate - program.historicalPassingENT;
     if (gap >= 5) {
       acadScore = 20;
-      reasons.push(
-        `Ваш прогноз ЕНТ ${profile.entEstimate} — выше проходного прошлого года (${program.historicalPassingENT}).`,
-      );
+      reasons.push(reasonEntAbove(profile.entEstimate, program.historicalPassingENT, lang));
     } else if (gap >= 0) {
       acadScore = 15;
-      reasons.push(
-        `Проходной прошлого года (${program.historicalPassingENT}) — на уровне вашего прогноза ${profile.entEstimate}: реально, но потребуется стабильная подготовка.`,
-      );
+      reasons.push(reasonEntClose(profile.entEstimate, program.historicalPassingENT, lang));
     } else if (gap >= -10) {
       acadScore = 8;
       warnings.push(
-        `Проходной прошлого года (${program.historicalPassingENT}) выше вашего прогноза (${profile.entEstimate}) на ${Math.abs(gap)} баллов — потребуется сильная подготовка.`,
+        warnEntBelow(program.historicalPassingENT, profile.entEstimate, gap, lang),
       );
     } else {
       acadScore = 3;
-      warnings.push(
-        `Проходной прошлого года (${program.historicalPassingENT}) значительно выше прогноза (${profile.entEstimate}).`,
-      );
+      warnings.push(warnEntFarBelow(program.historicalPassingENT, profile.entEstimate, lang));
     }
   }
 
   // --- Формат: город / общежитие (15) ---
   let formatScore = 8;
-  const cityOk =
-    profile.city === "any" ||
-    profile.city === "other" ||
-    program.city === profile.city;
   if (profile.city === "any") {
     formatScore += 4;
-    reasons.push("Город значения не имеет — рассматриваете все варианты.");
-  } else if (cityOk) {
+    reasons.push(reasonCityAny(lang));
+  } else if (profile.city === "other" || program.city === profile.city) {
     formatScore += 7;
     reasons.push(
-      program.city === profile.city
-        ? "Вуз в вашем городе — без переезда."
-        : "Вариант в вашем городе.",
+      program.city === profile.city ? reasonCityMatch(lang) : reasonCityOk(lang),
     );
   } else {
     formatScore -= 5;
-    warnings.push("Потребуется переезд в другой город.");
+    warnings.push(warnRelocate(lang));
   }
   if (profile.needsDorm && program.dorm) {
     formatScore += 3;
-    reasons.push("Есть общежитие — как вам и нужно.");
+    reasons.push(reasonDorm(lang));
   } else if (profile.needsDorm && !program.dorm) {
     formatScore -= 6;
-    warnings.push("Общежития может не быть — уточняйте на сайте вуза.");
+    warnings.push(warnNoDorm(lang));
   }
   formatScore = Math.max(0, Math.min(15, formatScore));
 
   // --- Язык (10) ---
   const langOk = program.languages.includes(profile.studyLanguage);
   const langScore = langOk ? 10 : 0;
-  if (langOk) reasons.push("Программа ведётся на нужном вам языке обучения.");
+  if (langOk) reasons.push(reasonLanguage(lang));
 
-  const score = Math.round(subjScore + budScore + acadScore + formatScore + langScore);
+  // --- Приоритеты пользователя (бонус до +12, штраф за нижние позиции) ---
+  const prio = (profile.priority ?? ["cost", "proximity", "ranking", "dorm"]) as string[];
+  const pos = (id: string) => prio.indexOf(id);
+  let prioBonus = 0;
+  // Стоимость: чем важнее, тем сильнее штраф за превышение бюджета
+  if (pos("cost") >= 0) {
+    if (above) prioBonus -= (4 - pos("cost")) * 2;
+    else prioBonus += (4 - pos("cost")) * 2.5;
+  }
+  // Близость к дому
+  if (pos("proximity") >= 0) {
+    if (profile.city === "any" || program.city === profile.city) prioBonus += (4 - pos("proximity")) * 1.5;
+    else prioBonus -= (4 - pos("proximity")) * 1.5;
+  }
+  // Сила программы: прокси — количество грантов и проходной балл
+  if (pos("ranking") >= 0) {
+    const strength =
+      (program.grantsCount ?? 0) / 80 + (program.historicalPassingENT ?? 0) / 140;
+    prioBonus += (4 - pos("ranking")) * 1.5 * Math.min(1.5, strength);
+  }
+  // Общежитие
+  if (pos("dorm") >= 0) {
+    if (profile.needsDorm) prioBonus += program.dorm ? (4 - pos("dorm")) : -(4 - pos("dorm")) * 0.5;
+  }  prioBonus = Math.max(-12, Math.min(12, prioBonus));
+
+  const score = Math.round(subjScore + budScore + acadScore + formatScore + langScore + prioBonus);
 
   return { score: Math.max(0, Math.min(100, score)), reasons, warnings, langOk };
 }
 
-/** Главная функция: топ-N рекомендаций с объяснениями */
-export function getRecommendations(profile: Profile, limit = 6): Recommendation[] {
+/** Главная функция: топ-N рекомендаций с объяснениями на выбранном языке */
+export function getRecommendations(profile: Profile, lang: Lang = "ru", limit = 6): Recommendation[] {
   const scored = PROGRAMS.map((p) => {
-    const { score, reasons, warnings, langOk } = scoreProgram(profile, p);
-    return { program: p, university: getUniversity(p.universityId), score, reasons, warnings, langOk };
+    const { score, reasons, warnings, langOk } = scoreProgram(profile, p, lang);
+    return {
+      program: p,
+      university: getUniversity(p.universityId),
+      score,
+      reasons,
+      warnings,
+      langOk,
+    };
   })
     .filter((r) => r.langOk) // хард-фильтр по языку
     .sort((a, b) => b.score - a.score);
 
   const top = scored.slice(0, limit);
-  const results: Recommendation[] = top.map(({ program, university, score, reasons, warnings }) => ({
+  return top.map(({ program, university, score, reasons, warnings }) => ({
     program,
     university,
     score,
     reasons: reasons.slice(0, 4),
     warnings,
   }));
-
-  // Честная пометка: если после фильтра ничего не осталось — UI покажет EmptyState с советом изменить вводные
-  return results;
 }

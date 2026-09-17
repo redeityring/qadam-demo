@@ -16,7 +16,7 @@ import {
 } from "react";
 import type { Profile, SubjectId } from "@/types";
 
-const STORAGE_KEY = "trajectory.profile.v1";
+const STORAGE_KEY = "qadam.profile.v1";
 
 export const DEFAULT_PROFILE: Profile = {
   grade: 11,
@@ -33,6 +33,8 @@ export const DEFAULT_PROFILE: Profile = {
   nextActionDoneAt: null,
   doneSteps: [],
   compareIds: [],
+  favoriteIds: [],
+  priority: ["cost", "proximity", "ranking", "dorm"],
 };
 
 export function isProfileComplete(p: Profile): boolean {
@@ -68,11 +70,11 @@ function reducer(state: Profile, action: Action): Profile {
       const has = state.interests.includes(action.subject);
       if (has) {
         const interests = state.interests.filter((s) => s !== action.subject);
-        const strengths = { ...state.strengths };
         if (interests.length === 0) {
           // нельзя остаться без интересов — игнорируем снятие последнего
           return state;
         }
+        const strengths = { ...state.strengths };
         delete strengths[action.subject];
         return { ...state, interests, strengths };
       }

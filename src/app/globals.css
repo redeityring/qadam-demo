@@ -1,11 +1,29 @@
 @import "tailwindcss";
 
+/*
+ * Qadam design system — «плотный минимализм».
+ * Палитра: хвойный зелёный (pine), мох (moss), глина/охра (clay),
+ * тёплая бумага (paper) и чернильный ink. Без генерик-индиго и небесно-голубого.
+ */
+
 @theme inline {
   --font-sans: var(--font-manrope);
-  --color-brand: #4f46e5;
-  --color-brand-dark: #3730a3;
-  --color-ink: #1e1b4b;
-  --color-accent: #f59e0b;
+
+  /* Основные цвета бренда */
+  --color-pine: #274943; /* тёмный хвойный — primary */
+  --color-pine-deep: #1c3833;
+  --color-pine-soft: #35594f;
+  --color-moss: #6c8a76; /* мягкий акцент */
+  --color-clay: #b0592f; /* тёплая глина — акцент действий/внимания */
+  --color-clay-deep: #8f4726;
+  --color-paper: #f5f1e8; /* тёплая бумага — фон */
+  --color-paper-dark: #ece5d8;
+  --color-ink: #22251f; /* чернильный текст */
+
+  /* Семантические */
+  --color-success: #4d7c57;
+  --color-warn: #a8702a;
+  --color-danger: #a8402f;
 }
 
 @layer base {
@@ -13,78 +31,302 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-slate-50 font-sans text-slate-900 antialiased;
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
   }
   ::selection {
-    @apply bg-indigo-100 text-indigo-900;
+    background: color-mix(in srgb, var(--color-pine) 18%, transparent);
+    color: var(--color-pine-deep);
+  }
+  /* Акцент системных элементов — в бренд-цвете */
+  .accent-pine,
+  input[type="range"] {
+    accent-color: var(--color-pine);
   }
 }
 
 @layer components {
-  /* --- Карточки --- */
+  /* --- Карточки: плотная сетка, тонкие кольца вместо теней --- */
   .card {
-    @apply rounded-2xl bg-white shadow-sm ring-1 ring-slate-200;
+    border-radius: 1rem;
+    background: #fffdf8;
+    box-shadow: 0 1px 2px rgb(34 37 31 / 0.04);
+    outline: 1px solid color-mix(in srgb, var(--color-ink) 8%, transparent);
+    outline-offset: -1px;
   }
   .card-hover {
-    @apply transition hover:-translate-y-0.5 hover:shadow-md hover:ring-indigo-200;
+    transition:
+      transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.25s,
+      outline-color 0.25s;
+  }
+  .card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px -12px rgb(28 56 51 / 0.25);
+    outline-color: color-mix(in srgb, var(--color-pine) 35%, transparent);
   }
 
   /* --- Кнопки --- */
   .btn {
-    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-50;
+    display: inline-flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition:
+      background-color 0.2s,
+      color 0.2s,
+      transform 0.15s,
+      box-shadow 0.2s;
+    user-select: none;
+    outline-offset: 2px;
+  }
+  .btn:focus-visible {
+    outline: 2px solid var(--color-pine);
+  }
+  .btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  .btn:active:not(:disabled) {
+    transform: scale(0.98);
   }
   .btn-primary {
-    @apply bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800;
+    background: var(--color-pine);
+    color: #f5f1e8;
+  }
+  .btn-primary:hover {
+    background: var(--color-pine-deep);
   }
   .btn-secondary {
-    @apply bg-white text-indigo-700 ring-1 ring-indigo-200 hover:bg-indigo-50;
+    background: #fffdf8;
+    color: var(--color-pine);
+    outline: 1px solid color-mix(in srgb, var(--color-pine) 25%, transparent);
+    outline-offset: -1px;
+  }
+  .btn-secondary:hover {
+    background: color-mix(in srgb, var(--color-pine) 8%, #fffdf8);
   }
   .btn-ghost {
-    @apply text-slate-600 hover:bg-slate-100 hover:text-slate-900;
+    color: color-mix(in srgb, var(--color-ink) 70%, transparent);
+  }
+  .btn-ghost:hover {
+    background: color-mix(in srgb, var(--color-ink) 6%, transparent);
+    color: var(--color-ink);
   }
   .btn-accent {
-    @apply bg-amber-500 text-white hover:bg-amber-600 active:bg-amber-700;
+    background: var(--color-clay);
+    color: #fffdf8;
+  }
+  .btn-accent:hover {
+    background: var(--color-clay-deep);
   }
 
   /* --- Поля ввода --- */
   .label {
-    @apply mb-2 block text-sm font-semibold text-slate-700;
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: color-mix(in srgb, var(--color-ink) 80%, transparent);
   }
   .input {
-    @apply w-full rounded-xl border-0 bg-white px-4 py-3 text-sm text-slate-900 ring-1 ring-slate-300 transition placeholder:text-slate-400 focus:ring-2 focus:ring-indigo-600 focus:outline-none;
+    width: 100%;
+    border-radius: 0.75rem;
+    border: 0;
+    background: #fffdf8;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    color: var(--color-ink);
+    outline: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+    transition: outline 0.2s;
+  }
+  .input::placeholder {
+    color: color-mix(in srgb, var(--color-ink) 35%, transparent);
+  }
+  .input:focus {
+    outline: 2px solid var(--color-pine);
   }
   .input-error {
-    @apply ring-2 ring-red-500;
+    outline: 2px solid var(--color-danger) !important;
   }
   .field-error {
-    @apply mt-1.5 text-xs font-medium text-red-600;
+    margin-top: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-danger);
   }
 
   /* --- Бейджи и чипы --- */
   .badge {
-    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    border-radius: 9999px;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 600;
   }
   .badge-demo {
-    @apply bg-amber-50 text-amber-700 ring-1 ring-amber-200;
+    background: color-mix(in srgb, var(--color-clay) 10%, transparent);
+    color: var(--color-clay-deep);
+    outline: 1px solid color-mix(in srgb, var(--color-clay) 25%, transparent);
+    outline-offset: -1px;
   }
   .badge-source {
-    @apply bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200;
+    background: color-mix(in srgb, var(--color-success) 12%, transparent);
+    color: var(--color-success);
+    outline: 1px solid color-mix(in srgb, var(--color-success) 30%, transparent);
+    outline-offset: -1px;
   }
   .chip {
-    @apply cursor-pointer rounded-full px-4 py-2 text-sm font-medium ring-1 transition select-none;
+    cursor: pointer;
+    border-radius: 9999px;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    outline: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+    outline-offset: -1px;
+    transition:
+      background-color 0.2s,
+      color 0.2s,
+      outline-color 0.2s,
+      transform 0.15s;
+    user-select: none;
+  }
+  .chip:active {
+    transform: scale(0.97);
   }
   .chip-off {
-    @apply bg-white text-slate-600 ring-slate-300 hover:ring-indigo-400;
+    background: #fffdf8;
+    color: color-mix(in srgb, var(--color-ink) 75%, transparent);
+  }
+  .chip-off:hover {
+    outline-color: var(--color-pine);
+    color: var(--color-pine);
   }
   .chip-on {
-    @apply bg-indigo-600 text-white ring-indigo-600;
+    background: var(--color-pine);
+    color: #f5f1e8;
+    outline-color: var(--color-pine);
   }
 
   /* --- Прочее --- */
   .section-title {
-    @apply text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl;
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+  }
+  @media (min-width: 640px) {
+    .section-title {
+      font-size: 1.5rem;
+    }
   }
   .muted {
-    @apply text-sm text-slate-500;
+    font-size: 0.875rem;
+    color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+  }
+}
+
+/* ---------- Минималистичные анимации ---------- */
+
+/* Появление блоков при загрузке экрана — каскад */
+@keyframes qadam-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.anim-rise {
+  animation: qadam-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.anim-rise-1 {
+  animation-delay: 0.05s;
+}
+.anim-rise-2 {
+  animation-delay: 0.12s;
+}
+.anim-rise-3 {
+  animation-delay: 0.2s;
+}
+.anim-rise-4 {
+  animation-delay: 0.28s;
+}
+.anim-rise-5 {
+  animation-delay: 0.36s;
+}
+
+/* Мягкое свечение для «следующего шага» */
+@keyframes qadam-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(176 89 47 / 0.15);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgb(176 89 47 / 0.08);
+  }
+}
+.anim-glow {
+  animation: qadam-glow 3s ease-in-out infinite;
+}
+
+/* Счётчик XP: подпрыгивание при начислении */
+@keyframes qadam-pop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.anim-pop {
+  animation: qadam-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Прогресс-бары и кольца */
+.anim-progress {
+  transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Логотип: знак шага мягко «дышит» */
+@keyframes qadam-breathe {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+.anim-breathe {
+  animation: qadam-breathe 4s ease-in-out infinite;
+}
+
+/* Уважение к prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .anim-rise,
+  .anim-glow,
+  .anim-pop,
+  .anim-breathe {
+    animation: none;
+  }
+  .anim-progress {
+    transition: none;
+  }
+  html {
+    scroll-behavior: auto;
   }
 }
