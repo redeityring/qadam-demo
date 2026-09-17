@@ -8,6 +8,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { JourneyLayout } from "@/components/JourneyLayout";
+import { AskAiPanel } from "@/components/AskAiPanel";
 import { useProfile } from "@/context/ProfileContext";
 import { useLang } from "@/i18n/LanguageContext";
 import { XP_PER_ROADMAP_STEP, useGamification } from "@/i18n/GamificationContext";
@@ -182,12 +183,21 @@ export default function RoadmapPage() {
         })}
       </div>
 
+      {/* Спроси ИИ о плане */}
+      <AskAiPanel />
+
+      {/* Экспорт плана в PDF */}
       <div className="anim-rise anim-rise-5 mt-6 flex flex-col gap-3 sm:flex-row sm:justify-between">
-        <Link href="/compare" className="btn btn-secondary">
-          ← {t.toCompareBack}
-        </Link>
-        <Link href="/profile" className="btn btn-secondary">
-          {t.recalcHint}
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <Link href="/compare" className="btn btn-secondary">
+            ← {t.toCompareBack}
+          </Link>
+          <Link href="/profile" className="btn btn-secondary">
+            {t.recalcHint}
+          </Link>
+        </div>
+        <Link href="/roadmap/print" className="btn btn-primary" target="_blank">
+          🖨 {t.exportPlan}
         </Link>
       </div>
     </JourneyLayout>

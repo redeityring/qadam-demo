@@ -6,13 +6,14 @@
  */
 
 import Link from "next/link";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { JourneyLayout } from "@/components/JourneyLayout";
+import { AnalysisOverlay } from "@/components/AnalysisOverlay";
 import { AskAiPanel } from "@/components/AskAiPanel";
 import { NextActionCard } from "@/components/NextActionCard";
 import { useProfile } from "@/context/ProfileContext";
 import { useLang } from "@/i18n/LanguageContext";
-import { SUBJECT_L } from "@/i18n/engine";
+import { MAJOR_L, SUBJECT_L } from "@/i18n/engine";
 import { getRecommendations } from "@/lib/engine/recommend";
 import { formatTenge } from "@/lib/constants";
 import { firstOpenStep, getRoadmap } from "@/lib/engine/roadmap";
@@ -20,6 +21,7 @@ import { firstOpenStep, getRoadmap } from "@/lib/engine/roadmap";
 export default function ResultsPage() {
   const { profile, complete, update, hydrated } = useProfile();
   const { lang, t } = useLang();
+  const [showAnalysis, setShowAnalysis] = useState(true);
 
   // Чистая проекция профиля: любые изменения анкеты мгновенно меняют выдачу
   const recommendations = useMemo(
@@ -41,6 +43,18 @@ export default function ResultsPage() {
           ))}
         </div>
       </JourneyLayout>
+    );
+  }
+
+  // «Думающий» анализ: показывается при каждом заходе на результаты (SSR-безопасно,
+  // т.к. состояние начинается с true только после гидрации)
+  if (hydrated && complete && showAnalysis) {
+    return (
+      <AnalysisOverlay
+        onDone={() => {
+          setShowAnalysis(false);
+        }}
+      />
     );
   }
 
@@ -151,7 +165,7 @@ export default function ResultsPage() {
                       {i === 0 ? t.topPick : `${t.optionN}${i + 1}`} ·{" "}
                       {r.university.shortName ?? r.university.name}
                     </p>
-                    <h2 className="mt-0.5 font-bold text-ink">{r.program.title}</h2>
+                    <h2 className="mt-0.5 font-bold text-ink">{MAJOR_L[r.program.majorId][lang]}</h2>
                     <p className="muted mt-0.5 text-xs">{r.university.name}</p>
                   </div>
                   {/* Кольцо совместимости */}

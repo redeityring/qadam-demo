@@ -7,15 +7,36 @@ export type SubjectId =
   | "chemistry"
   | "biology"
   | "history"
+  | "worldHistory"
   | "geography"
   | "kazakh"
   | "russian"
   | "english"
-  | "economics";
+  | "economics"
+  | "law"
+  | "art"
+  | "pe"
+  | "german"
+  | "french";
 
 export type StudyLanguage = "ru" | "kz" | "en";
 
-export type CityId = "almaty" | "astana" | "shymkent" | "other" | "any";
+export type CityId =
+  | "almaty"
+  | "astana"
+  | "shymkent"
+  | "karaganda"
+  | "aktobe"
+  | "taraz"
+  | "pavlodar"
+  | "oskemen"
+  | "atyrau"
+  | "aktau"
+  | "turkistan"
+  | "kostanay"
+  | "semey"
+  | "other"
+  | "any";
 
 export type ExamId = "ent" | "ielts" | "sat";
 
@@ -27,6 +48,52 @@ export type ProgramField =
   | "humanities"
   | "natural";
 
+/** Ключ специальности (майора) — локализуемое название из i18n/engine MAJOR_L */
+export type MajorId =
+  // IT
+  | "computer-science"
+  | "information-systems"
+  | "software-engineering"
+  | "cybersecurity"
+  | "media-tech"
+  | "telecom"
+  // Engineering
+  | "mining"
+  | "chem-eng"
+  | "civil"
+  | "mechanical"
+  | "oil-gas"
+  | "transport"
+  | "power"
+  | "geology"
+  | "metallurgy"
+  // Medicine
+  | "general-medicine"
+  | "dentistry"
+  | "pharmacy"
+  | "nursing"
+  // Economics
+  | "finance"
+  | "management"
+  | "economics"
+  | "accounting"
+  | "tourism"
+  | "logistics"
+  // Humanities
+  | "law"
+  | "journalism"
+  | "international-relations"
+  | "foreign-philology"
+  | "translation"
+  | "pedagogy"
+  | "psychology"
+  // Natural
+  | "biology"
+  | "chemistry"
+  | "ecology"
+  | "geography-science"
+  | "mathematics";
+
 export interface Profile {
   /** Класс обучения */
   grade: 9 | 10 | 11;
@@ -35,10 +102,14 @@ export interface Profile {
   interests: SubjectId[];
   /** Самооценка силы предмета 1..5 */
   strengths: Partial<Record<SubjectId, number>>;
+  /** Желаемые специальности (майоры) — необязательно, до 5 */
+  desiredMajors?: MajorId[];
   /** Язык обучения */
   studyLanguage: StudyLanguage;
   /** Бюджет на обучение, ₸ в год */
   budgetPerYearTenge: number;
+  /** Бюджет не важен / есть грант-намерение */
+  budgetAny?: boolean;
   /** Нужно общежитие */
   needsDorm: boolean;
   /** География: только КЗ или КЗ + за рубеж */
@@ -47,6 +118,10 @@ export interface Profile {
   plannedExams: ExamId[];
   /** Прогноз/самооценка балла ЕНТ (50..140) */
   entEstimate: number | null;
+  /** Ожидаемый балл IELTS (4.0..9.0, шаг 0.5) */
+  ieltsEstimate?: number | null;
+  /** Ожидаемый балл SAT (400..1600) */
+  satEstimate?: number | null;
   /** Год поступления (выпуск из школы + поступление) */
   targetYear: number;
   /** Служебное: последний отмеченный выполненным «следующий шаг» */
@@ -65,7 +140,8 @@ export interface Profile {
 export interface Program {
   id: string;
   universityId: string;
-  title: string;
+  /** Ключ специальности для локализации */
+  majorId: MajorId;
   field: ProgramField;
   /** Предметы для поступления */
   entrySubjects: SubjectId[];
@@ -90,6 +166,8 @@ export interface University {
   /** Краткое описание для карточки */
   blurb: string;
   website: string;
+  /** Рейтинг 0..5 (демо-оценка на основе открытых списков) */
+  rating?: number;
 }
 
 /** Результат рекомендации — возвращается движком (этап 2) */

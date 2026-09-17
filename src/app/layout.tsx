@@ -11,8 +11,8 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://qadam.kz"),
-  title: "Qadam — персональный маршрут поступления",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://qadam.edu.kz"),
+  title: "Qadam — твой шаг к университету",
   description:
     "Ответьте на несколько вопросов и получите персональный маршрут поступления: куда поступать, почему подходит и что делать следующим шагом. Қазақша, русский, English.",
 };

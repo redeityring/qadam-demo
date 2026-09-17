@@ -8,6 +8,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { LogoMark } from "@/components/LogoMark";
 import { Stepper } from "@/components/Stepper";
 import { levelFor, levelName, levelProgress, useGamification } from "@/i18n/GamificationContext";
 import { useLang } from "@/i18n/LanguageContext";
@@ -65,13 +66,9 @@ export function JourneyLayout({
       <header className="sticky top-0 z-20 border-b border-ink/8 bg-paper/90 backdrop-blur">
         <div className={`mx-auto w-full px-4 py-3 ${wide ? "max-w-6xl" : "max-w-3xl"}`}>
           <div className="mb-3 flex items-center justify-between gap-2">
-            <Link href="/" className="group flex items-center gap-2 font-extrabold tracking-tight">
-              <span className="anim-breathe flex h-7 w-7 items-center justify-center rounded-lg bg-pine text-sm text-paper">
-                Q
-              </span>
-              <span className="text-ink">
-                Qadam<span className="text-pine">.kz</span>
-              </span>
+            <Link href="/" className="group flex items-center gap-2.5 font-extrabold tracking-tight">
+              <LogoMark className="anim-breathe h-8 w-8" />
+              <span className="text-ink">Qadam</span>
             </Link>
             <div className="flex items-center gap-2">
               <XpChip />

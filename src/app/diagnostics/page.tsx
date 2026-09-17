@@ -7,10 +7,11 @@
 
 import Link from "next/link";
 import { JourneyLayout } from "@/components/JourneyLayout";
+import { AskAiPanel } from "@/components/AskAiPanel";
 import { useProfile } from "@/context/ProfileContext";
 import { useLang } from "@/i18n/LanguageContext";
+import { CITY_L, budgetLabel } from "@/i18n/engine";
 import { getDiagnostics } from "@/lib/engine/diagnostics";
-import { formatTenge } from "@/lib/constants";
 
 export default function DiagnosticsPage() {
   const { profile, complete } = useProfile();
@@ -76,12 +77,18 @@ export default function DiagnosticsPage() {
       <section className="card anim-rise anim-rise-4 mt-4 p-5">
         <h2 className="text-xs font-bold tracking-wide text-ink/50 uppercase">{t.diagSummary}</h2>
         <p className="mt-2 text-sm text-ink/80">{d.summary}</p>
-        <dl className="mt-4 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
+        <dl className="mt-4 grid grid-cols-2 gap-3 text-sm sm:grid-cols-3">
           {[
             [t.diagGrade, `${profile.grade}`],
-            [t.diagCity, profile.city === "any" ? "—" : profile.city === "almaty" ? (lang === "en" ? "Almaty" : "Алматы") : profile.city === "astana" ? (lang === "en" ? "Astana" : "Астана") : profile.city === "shymkent" ? (lang === "en" ? "Shymkent" : "Шымкент") : (lang === "en" ? "Other" : lang === "kk" ? "Басқа" : "Другой")],
-            [t.diagBudget, formatTenge(profile.budgetPerYearTenge, lang)],
+            [t.diagCity, CITY_L[profile.city][lang]],
+            [t.diagBudget, budgetLabel(profile, lang)],
             [t.diagENT, profile.entEstimate ?? "—"],
+            ...(profile.plannedExams.includes("ielts")
+              ? [["IELTS", profile.ieltsEstimate ? profile.ieltsEstimate.toFixed(1) : "—"] as [string, string]]
+              : []),
+            ...(profile.plannedExams.includes("sat")
+              ? [["SAT", profile.satEstimate ? String(profile.satEstimate) : "—"] as [string, string]]
+              : []),
           ].map(([k, v]) => (
             <div key={k} className="rounded-xl bg-paper-dark/60 p-3">
               <dt className="text-xs text-ink/45">{k}</dt>
@@ -90,6 +97,9 @@ export default function DiagnosticsPage() {
           ))}
         </dl>
       </section>
+
+      {/* Спроси ИИ прямо на диагностике */}
+      <AskAiPanel />
 
       {/* Навигация */}
       <div className="anim-rise anim-rise-5 mt-6 flex flex-col gap-3 sm:flex-row sm:justify-between">
