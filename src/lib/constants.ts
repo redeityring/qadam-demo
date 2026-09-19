@@ -68,6 +68,7 @@ export const CITIES: Array<{ id: CityId; label: Record<Lang, string> }> = [
   { id: "turkistan", label: { ru: "Туркестан", kk: "Түркістан", en: "Turkistan" } },
   { id: "kostanay", label: { ru: "Костанай", kk: "Қостанай", en: "Kostanay" } },
   { id: "semey", label: { ru: "Семей", kk: "Семей", en: "Semey" } },
+  { id: "kyzylorda", label: { ru: "Кызылорда", kk: "Қызылорда", en: "Kyzylorda" } },
   { id: "other", label: { ru: "Другой город", kk: "Басқа қала", en: "Another city" } },
   { id: "any", label: { ru: "Не важно / готов переехать", kk: "Маңызды емес", en: "Any / relocate" } },
 ];

@@ -12,7 +12,7 @@ import { LogoMark } from "@/components/LogoMark";
 import { useProfile } from "@/context/ProfileContext";
 import type { Lang } from "@/i18n/dictionaries";
 import { useLang } from "@/i18n/LanguageContext";
-import { getRecommendations } from "@/lib/engine/recommend";
+import { catalogSize, getRecommendations } from "@/lib/engine/recommend";
 import type { Profile, SubjectId } from "@/types";
 
 /* ---------- Локализация ---------- */
@@ -31,7 +31,8 @@ const STR = {
       "Собираем топ-варианты…",
     ],
     quizHeader: "Пока идёт анализ — вопрос:",
-    progUni: "программ в каталоге",
+    skip: "Пропустить анализ — сразу к вариантам",
+    progUni: "программ проверено",
     progFits: "подходят по предметам",
     progBudget: "в вашем бюджете",
     progEnt: "по силе вашего балла ЕНТ",
@@ -50,7 +51,8 @@ const STR = {
       "Үздік нұсқаларды жинақтау…",
     ],
     quizHeader: "Талдау кезінде — сұрақ:",
-    progUni: "бағдарлама каталогте",
+    skip: "Талдауды өткізіп жіберу — нұсқаларға өту",
+    progUni: "бағдарлама тексерілді",
     progFits: "пәндерге сай келеді",
     progBudget: "бюджетіңізге сай",
     progEnt: "ЖБТ балыңызға сай",
@@ -69,8 +71,8 @@ const STR = {
       "Assembling the top options…",
     ],
     quizHeader: "While the analysis runs — a quick question:",
-    progUnu: "", // typo-guard
-    progUni: "programs in catalog",
+    skip: "Skip the analysis — show my options",
+    progUni: "programs checked",
     progFits: "match your subjects",
     progBudget: "fit your budget",
     progEnt: "match your ENT estimate",
@@ -186,9 +188,10 @@ export function AnalysisOverlay({ onDone }: { onDone: () => void }) {
   // Реальные промежуточные результаты движка — прогресс честный
   const stats = useMemo(() => {
     if (!complete) return null;
-    const recs = getRecommendations(profile, lang, 100);
-    const fits = recs.filter((r) => r.score >= 60).length;
-    return { total: recs.length, fits };
+    const catalog = catalogSize().programs;
+    const checked = getRecommendations(profile, lang, catalog);
+    const fits = checked.filter((r) => r.score >= 60).length;
+    return { total: checked.length, fits };
   }, [complete, profile, lang]);
 
   useEffect(() => {
@@ -312,6 +315,15 @@ export function AnalysisOverlay({ onDone }: { onDone: () => void }) {
             <span className="anim-dot anim-dot-2 h-2 w-2 rounded-full bg-pine" />
             <span className="anim-dot anim-dot-3 h-2 w-2 rounded-full bg-pine" />
           </div>
+
+          {/* Всегда можно выйти: анализ не должен запирать интерфейс */}
+          <button
+            type="button"
+            onClick={onDone}
+            className="btn btn-ghost mt-4 w-full !py-2 text-xs"
+          >
+            {s.skip}
+          </button>
         </div>
 
         {/* Мини-квиз поверх карточки анализа */}

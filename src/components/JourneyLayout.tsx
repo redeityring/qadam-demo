@@ -6,12 +6,15 @@
  */
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { LogoMark } from "@/components/LogoMark";
 import { Stepper } from "@/components/Stepper";
+import { useProfile } from "@/context/ProfileContext";
 import { levelFor, levelName, levelProgress, useGamification } from "@/i18n/GamificationContext";
 import { useLang } from "@/i18n/LanguageContext";
+import { firstOpenStep, getRoadmap } from "@/lib/engine/roadmap";
 
 function XpChip() {
   const { xp, hydrated } = useGamification();
@@ -52,6 +55,42 @@ function XpChip() {
   );
 }
 
+/**
+ * NextStepBanner — этап 7 кейса («Следующий шаг»), всегда под рукой:
+ * тонкая плашка над контентом с текущим ближайшим действием.
+ * Скрывается на самом экране плана, где карточка шага уже есть.
+ */
+function NextStepBanner() {
+  const pathname = usePathname();
+  const { profile, complete, hydrated } = useProfile();
+  const { lang, t } = useLang();
+
+  const open = useMemo(
+    () =>
+      hydrated && complete
+        ? firstOpenStep(getRoadmap(profile, lang), profile.doneSteps ?? [])
+        : null,
+    [hydrated, complete, profile, lang],
+  );
+
+  if (!open || pathname.startsWith("/roadmap")) return null;
+
+  return (
+    <Link
+      href="/roadmap#next-action"
+      className="card anim-rise mb-4 flex items-center gap-2.5 border-l-4 border-l-clay px-4 py-2.5 transition hover:bg-pine/5"
+    >
+      <span className="badge badge-demo shrink-0">
+        {lang === "en" ? "Step 7" : lang === "kk" ? "Қадам 7" : "Шаг 7"} · {t.nextStep}
+      </span>
+      <span className="min-w-0 flex-1 truncate text-sm font-semibold text-ink/80">{open.title}</span>
+      <span aria-hidden className="shrink-0 font-bold text-clay">
+        →
+      </span>
+    </Link>
+  );
+}
+
 export function JourneyLayout({
   children,
   wide = false,
@@ -80,6 +119,7 @@ export function JourneyLayout({
       </header>
 
       <main className={`mx-auto w-full flex-1 px-4 py-6 sm:py-8 ${wide ? "max-w-6xl" : "max-w-3xl"}`}>
+        <NextStepBanner />
         {children}
       </main>
 

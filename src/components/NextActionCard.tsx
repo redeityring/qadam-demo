@@ -28,7 +28,8 @@ export function NextActionCard({ action }: { action: NextAction }) {
 
   return (
     <aside
-      className={`card anim-glow border-l-4 p-4 sm:p-5 ${
+      id="next-action"
+      className={`card anim-glow scroll-mt-40 border-l-4 p-4 sm:p-5 ${
         isDone ? "border-l-success" : "border-l-clay"
       }`}
       aria-label={t.nextStep}

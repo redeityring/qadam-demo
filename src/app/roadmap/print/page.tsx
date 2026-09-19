@@ -9,7 +9,7 @@ import Link from "next/link";
 import { LogoMark } from "@/components/LogoMark";
 import { useProfile } from "@/context/ProfileContext";
 import { useLang } from "@/i18n/LanguageContext";
-import { CITY_L, budgetLabel } from "@/i18n/engine";
+import { CITY_L, budgetLabel, sourceLabel } from "@/i18n/engine";
 import { firstOpenStep, getRoadmap, roadmapSectionLabel, ROADMAP_SECTIONS } from "@/lib/engine/roadmap";
 
 export default function RoadmapPrintPage() {
@@ -108,10 +108,10 @@ export default function RoadmapPrintPage() {
                           <p className="mt-0.5 text-[11px] text-ink/45">
                             {s.source.url ? (
                               <a href={s.source.url} className="underline">
-                                {s.source.label}
+                                {sourceLabel(s.source.label, lang)}
                               </a>
                             ) : (
-                              s.source.label
+                              sourceLabel(s.source.label, lang)
                             )}
                           </p>
                         </div>

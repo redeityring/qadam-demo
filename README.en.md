@@ -15,7 +15,9 @@ LOCUS Startup Hackathon 2026, Case 02).
 Qadam walks the user through 7 stages: landing → profile (7-step questionnaire) → diagnostics →
 recommendations (with "why it fits" explanations) → comparison → roadmap → next action.
 Extras: deadline calendar, scholarships & grants, saved programs, and an **Ask AI** panel
-(OpenRouter free-tier models) that answers questions with the user's profile in mind.
+(OpenRouter free-tier models, with a built-in offline consultant as fallback) that answers
+questions with the user's profile in mind — up to 5 questions per day, with explicit consent
+before the profile is shared with the model.
 
 ## Stack
 Next.js 16 + React 19 + TypeScript, Tailwind CSS 4, rule-based recommendation engines,
@@ -29,9 +31,28 @@ language 10 + user priorities ±12. Every weight produces a human-language expla
 ## Getting started
 ```bash
 npm install
-npm run dev   # http://localhost:3000
+npm run dev            # Turbopack, http://localhost:3000
+npm run dev:webpack    # same app with Webpack (parity scripts)
 ```
-For Ask AI, add `OPENROUTER_API_KEY` to `.env.local` (see README.md).
+**Ask AI works without any key.** With no `OPENROUTER_API_KEY` it is answered by Qadam's
+built-in offline consultant (rule-based, from your profile). Add `OPENROUTER_API_KEY` to
+`.env.local` to use a real LLM as well.
+
+## Ask AI: consent, limits and abuse protection
+The endpoint `/api/ask` does not trust the client:
+
+- **Strict validation** — question 2–300 chars, language `ru|kk|en`, profile accepted only
+  through a whitelist; everything else is dropped. JSON only, body ≤ 8 KB.
+- **Explicit consent** — the profile is sent to the model only with
+  `consent: { granted: true, version }`. The panel spells out exactly what is sent (an
+expandable block with the raw request body) and consent can be revoked with one click.
+- **Data minimisation** — favourites, comparison picks and plan checkmarks never leave the
+  browser, and no questions are logged.
+- **Daily AI limit — 5 questions per visitor per day** (Astana time), tracked in a signed
+  httpOnly cookie plus a per-IP safety counter, so clearing cookies does not reset it.
+- **Honest degradation** — once the limit is reached the service does not break: the built-in
+  consultant answers and the UI says so, including when the limit resets.
+- **Burst protection** — max 12 requests per minute per IP, then `429`.
 
 ## Test script
 Fill the questionnaire → diagnostics → recommendations (check the explanations) → compare two

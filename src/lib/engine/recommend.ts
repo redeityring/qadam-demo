@@ -2,8 +2,11 @@
  * Движок рекомендаций — чистые функции, детерминированный rule-based скоринг.
  * Каждое слагаемое оценки порождает объяснение человеческим языком (RU/KZ/EN).
  *
- * Веса: предметы 30 / бюджет 25 / академика 20 / формат 15 / язык 10.
- * Язык обучения — единственный хард-фильтр.
+ * Веса: предметы 30 / бюджет 25 / академика 20 / формат 15 / язык 10,
+ * плюс бонусы за желаемую специальность, рейтинг вуза и приоритеты.
+ * Итог нормируется на теоретический максимум и показывается как 0–100.
+ * Язык обучения — единственный хард-фильтр; нерелевантные направления получают
+ * штраф −40 и помечаются «запасной вариант».
  */
 
 import type { Lang } from "@/i18n/dictionaries";
@@ -23,6 +26,7 @@ import {
   reasonUniRating,
   warnBudgetFar,
   warnBudgetSlightly,
+  warnNotRelevant,
   warnEntBelow,
   warnEntFarBelow,
   warnNoDorm,
@@ -52,6 +56,14 @@ function budgetFactor(program: Program, profile: Profile) {
   return { ratio: 0, above: true };
 }
 
+/**
+ * Теоретический максимум сырых баллов: сумма всех весов плюс максимальные бонусы.
+ * 30 (предметы) + 25 (бюджет) + 20 (академика) + 15 (формат) + 10 (язык)
+ * + 4.8 (лучший рейтинг вуза) + 12 (приоритеты) + 14 (желаемая специальность) = 130.8.
+ * Используется только для перевода сырой суммы в шкалу 0–100.
+ */
+const MAX_RAW_SCORE = 30 + 25 + 20 + 15 + 10 + (5 - 3.5) * 3.2 + 12 + 14;
+
 /** Оценка совместимости 0..100 + объяснения на выбранном языке */
 export function scoreProgram(profile: Profile, program: Program, lang: Lang = "ru") {
   const reasons: string[] = [];
@@ -72,6 +84,15 @@ export function scoreProgram(profile: Profile, program: Program, lang: Lang = "r
   } else if (overlap.length > 0) {
     reasons.push(reasonSubjectsPartial(overlap, lang));
   }
+
+  // --- Релевантность направления ---
+  // Без этой поправки дешёвая, но чужая программа обгоняла профильные: при интересе
+  // к биологии первым вариантом становился «учитель английского» — он просто
+  // укладывался в бюджет. Программа без общего предмета и без совпадения с желаемой
+  // специальностью помечается запасным вариантом и теряет вес направления (−40 из 130).
+  const relevant = overlap.length > 0 || majorMatch || profile.interests.length === 0;
+  if (!relevant) warnings.push(warnNotRelevant(lang));
+  const relevancePenalty = relevant ? 0 : -40;
 
   // --- Бюджет (25) ---
   const { ratio: budRatio, above } = budgetFactor(program, profile);
@@ -164,9 +185,22 @@ export function scoreProgram(profile: Profile, program: Program, lang: Lang = "r
   }
   prioBonus = Math.max(-12, Math.min(12, prioBonus));
 
-  const score = Math.round(
-    subjScore + budScore + acadScore + formatScore + langScore + ratingScore + prioBonus + (majorMatch ? 14 : 0),
-  );
+  const raw =
+    subjScore +
+    budScore +
+    acadScore +
+    formatScore +
+    langScore +
+    ratingScore +
+    prioBonus +
+    relevancePenalty +
+    (majorMatch ? 14 : 0);
+
+  // Нормировка на теоретический максимум сырых баллов.
+  // Без неё сильный профиль набирал 130+ и упирался в потолок: у десятка программ
+  // «совместимость 100», и цифра перестаёт что-либо различать. С нормировкой
+  // шкала 0–100 снова работает: топ-варианты дают ~80–90, средние — 50–70.
+  const score = Math.round((Math.max(0, raw) / MAX_RAW_SCORE) * 100);
 
   return { score: Math.max(0, Math.min(100, score)), reasons, warnings, langOk };
 }

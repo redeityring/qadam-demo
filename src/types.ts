@@ -35,6 +35,7 @@ export type CityId =
   | "turkistan"
   | "kostanay"
   | "semey"
+  | "kyzylorda"
   | "other"
   | "any";
 
@@ -87,6 +88,30 @@ export type MajorId =
   | "translation"
   | "pedagogy"
   | "psychology"
+  // Педагогические (учительские) специальности
+  | "math-teacher"
+  | "physics-teacher"
+  | "biology-teacher"
+  | "chemistry-teacher"
+  | "history-teacher"
+  | "kazakh-teacher"
+  | "russian-teacher"
+  | "english-teacher"
+  | "primary-education"
+  | "preschool-education"
+  | "physical-culture"
+  // Творческие специальности
+  | "music-art"
+  | "vocal-art"
+  | "instrumental-art"
+  | "acting"
+  | "film-tv"
+  | "design"
+  | "painting"
+  | "choreography"
+  | "architecture"
+  // Economics (доп.)
+  | "marketing"
   // Natural
   | "biology"
   | "chemistry"

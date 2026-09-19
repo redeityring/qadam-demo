@@ -189,6 +189,7 @@ export default function ComparePage() {
                       [t.rowGrants, r.program.grantsCount ?? "—"],
                       [t.rowSubjects, r.program.entrySubjects.map((s) => SUBJECT_L[s][lang]).join(" + ")],
                       [t.rowLangs, r.program.languages.map((l) => l.toUpperCase()).join(", ")],
+                      [t.rowCity, CITY_L[r.program.city]?.[lang] ?? "—"],
                       [t.rowDorm, r.program.dorm ? t.dormYes : t.dormNo],
                     ].map(([k, v]) => (
                       <div key={k} className="flex justify-between gap-4 border-b border-ink/8 pb-2">

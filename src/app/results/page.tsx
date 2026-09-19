@@ -6,22 +6,50 @@
  */
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useReducer } from "react";
 import { JourneyLayout } from "@/components/JourneyLayout";
 import { AnalysisOverlay } from "@/components/AnalysisOverlay";
 import { AskAiPanel } from "@/components/AskAiPanel";
 import { NextActionCard } from "@/components/NextActionCard";
 import { useProfile } from "@/context/ProfileContext";
 import { useLang } from "@/i18n/LanguageContext";
-import { MAJOR_L, SUBJECT_L } from "@/i18n/engine";
+import { MAJOR_L, sourceLabel, SUBJECT_L } from "@/i18n/engine";
 import { getRecommendations } from "@/lib/engine/recommend";
 import { formatTenge } from "@/lib/constants";
 import { firstOpenStep, getRoadmap } from "@/lib/engine/roadmap";
 
+/** Ключ в sessionStorage: анализ показываем один раз за сессию, а не при каждом входе */
+const ANALYSIS_SEEN_KEY = "qadam.analysis.seen.v1";
+
 export default function ResultsPage() {
   const { profile, complete, update, hydrated } = useProfile();
   const { lang, t } = useLang();
-  const [showAnalysis, setShowAnalysis] = useState(true);
+  // Начинаем с false, чтобы сервер и клиент совпадали (иначе hydration mismatch).
+  // Пока профиль не восстановлен, показываем скелет — «мигания» вариантов не будет.
+  // useReducer + dispatch в эффекте: тот же SSR-безопасный приём, что и в ProfileContext
+  const [showAnalysis, setShowAnalysis] = useReducer(
+    (_state: boolean, next: boolean) => next,
+    false,
+  );
+  const [analysisChecked, markChecked] = useReducer(() => true, false);
+
+  useEffect(() => {
+    try {
+      if (window.sessionStorage.getItem(ANALYSIS_SEEN_KEY) !== "1") setShowAnalysis(true);
+    } catch {
+      setShowAnalysis(true);
+    }
+    markChecked();
+  }, []);
+
+  function closeAnalysis() {
+    setShowAnalysis(false);
+    try {
+      window.sessionStorage.setItem(ANALYSIS_SEEN_KEY, "1");
+    } catch {
+      /* приватный режим — просто скрываем оверлей */
+    }
+  }
 
   // Чистая проекция профиля: любые изменения анкеты мгновенно меняют выдачу
   const recommendations = useMemo(
@@ -34,7 +62,7 @@ export default function ResultsPage() {
     [roadmap, profile.doneSteps],
   );
 
-  if (!hydrated) {
+  if (!hydrated || !analysisChecked) {
     return (
       <JourneyLayout>
         <div className="space-y-4" aria-busy="true">
@@ -46,16 +74,9 @@ export default function ResultsPage() {
     );
   }
 
-  // «Думающий» анализ: показывается при каждом заходе на результаты (SSR-безопасно,
-  // т.к. состояние начинается с true только после гидрации)
+  // «Думающий» анализ: один раз за сессию, с возможностью пропустить (SSR-безопасно)
   if (hydrated && complete && showAnalysis) {
-    return (
-      <AnalysisOverlay
-        onDone={() => {
-          setShowAnalysis(false);
-        }}
-      />
-    );
+    return <AnalysisOverlay onDone={closeAnalysis} />;
   }
 
   if (!complete) {
@@ -114,8 +135,6 @@ export default function ResultsPage() {
               }
         }
       />
-
-      <AskAiPanel />
 
       {/* Изменить вводные — проверка жюри «изменил → изменилось» */}
       <div className="card anim-rise anim-rise-2 mt-4 flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
@@ -239,11 +258,11 @@ export default function ResultsPage() {
                         rel="noreferrer"
                         className="badge badge-source hover:underline"
                       >
-                        ↗ {s.label}
+                        ↗ {sourceLabel(s.label, lang)}
                       </a>
                     ) : (
                       <span key={s.label} className="badge badge-demo">
-                        {s.label}
+                        {sourceLabel(s.label, lang)}
                       </span>
                     ),
                   )}
@@ -281,6 +300,9 @@ export default function ResultsPage() {
           })}
         </div>
       )}
+
+      {/* Спроси ИИ — после карточек рекомендаций */}
+      <AskAiPanel />
 
       <div className="anim-rise anim-rise-5 mt-6 flex flex-col gap-3 sm:flex-row sm:justify-between">
         <Link href="/diagnostics" className="btn btn-secondary">

@@ -24,6 +24,7 @@ export const CITY_L: Record<CityId, Record<Lang, string>> = {
   turkistan: { ru: "Туркестан", kk: "Түркістан", en: "Turkistan" },
   kostanay: { ru: "Костанай", kk: "Қостанай", en: "Kostanay" },
   semey: { ru: "Семей", kk: "Семей", en: "Semey" },
+  kyzylorda: { ru: "Кызылорда", kk: "Қызылорда", en: "Kyzylorda" },
   other: { ru: "Другой город", kk: "Басқа қала", en: "Another city" },
   any: { ru: "Не важно / готов переехать", kk: "Маңызды емес / көшуге дайынмын", en: "Any / ready to relocate" },
 };
@@ -89,10 +90,34 @@ export const MAJOR_L: Record<MajorId, Record<Lang, string>> = {
   law: { ru: "Юриспруденция", kk: "Құқықтану", en: "Law" },
   journalism: { ru: "Журналистика", kk: "Журналистика", en: "Journalism" },
   "international-relations": { ru: "Международные отношения", kk: "Халықаралық қатынастар", en: "International Relations" },
-  "foreign-philology": { ru: "Иностранная филология", kk: "Шетел филологиясы", en: "Foreign Philology" },
   translation: { ru: "Переводческое дело", kk: "Аударма ісі", en: "Translation Studies" },
+  "foreign-philology": { ru: "Иностранная филология", kk: "Шет тілі филологиясы", en: "Foreign Philology" },
   pedagogy: { ru: "Педагогика", kk: "Педагогика", en: "Education" },
   psychology: { ru: "Психология", kk: "Психология", en: "Psychology" },
+  // Педагогические (учительские)
+  "math-teacher": { ru: "Учитель математики", kk: "Математика мұғалімі", en: "Math Teacher Education" },
+  "physics-teacher": { ru: "Учитель физики", kk: "Физика мұғалімі", en: "Physics Teacher Education" },
+  "biology-teacher": { ru: "Учитель биологии", kk: "Биология мұғалімі", en: "Biology Teacher Education" },
+  "chemistry-teacher": { ru: "Учитель химии", kk: "Химия мұғалімі", en: "Chemistry Teacher Education" },
+  "history-teacher": { ru: "Учитель истории", kk: "Тарих мұғалімі", en: "History Teacher Education" },
+  "kazakh-teacher": { ru: "Учитель казахского языка", kk: "Қазақ тілі мұғалімі", en: "Kazakh Language Teacher" },
+  "russian-teacher": { ru: "Учитель русского языка", kk: "Орыс тілі мұғалімі", en: "Russian Language Teacher" },
+  "english-teacher": { ru: "Учитель английского языка", kk: "Ағылшын тілі мұғалімі", en: "English Teacher Education" },
+  "primary-education": { ru: "Начальное образование", kk: "Бастауыш білім беру", en: "Primary Education" },
+  "preschool-education": { ru: "Дошкольное образование", kk: "Мектепке дейінгі білім беру", en: "Preschool Education" },
+  "physical-culture": { ru: "Физическая культура и спорт", kk: "Дене шынықтыру және спорт", en: "Physical Education & Sport" },
+  // Творческие
+  "music-art": { ru: "Музыкальное образование", kk: "Музыкалық білім беру", en: "Music Education" },
+  "vocal-art": { ru: "Вокальное искусство", kk: "Вокал өнері", en: "Vocal Art" },
+  "instrumental-art": { ru: "Инструментальное искусство", kk: "Аспаптық өнер", en: "Instrumental Performance" },
+  acting: { ru: "Актёрское искусство", kk: "Актер өнері", en: "Acting" },
+  "film-tv": { ru: "Кино и телевидение", kk: "Кино және теледидар", en: "Film & Television" },
+  design: { ru: "Дизайн", kk: "Дизайн", en: "Design" },
+  painting: { ru: "Живопись", kk: "Кескіндеме", en: "Painting" },
+  choreography: { ru: "Хореография", kk: "Хореография", en: "Choreography" },
+  architecture: { ru: "Архитектура", kk: "Сәулет", en: "Architecture" },
+  // Economics (доп.)
+  marketing: { ru: "Маркетинг", kk: "Маркетинг", en: "Marketing" },
   // Natural
   biology: { ru: "Биология", kk: "Биология", en: "Biology" },
   chemistry: { ru: "Химия", kk: "Химия", en: "Chemistry" },
@@ -313,6 +338,41 @@ export function reasonSubjectsPartial(overlap: SubjectId[], lang: Lang): string 
   if (lang === "en") return `Some entry subjects (${list}) are close to you.`;
   if (lang === "kk") return `Түсу пәндерінің бір бөлігі (${list}) сізге жақын.`;
   return `Часть предметов поступления (${list}) вам близка.`;
+}
+
+/**
+ * Локализованные подписи источников данных: в JSON пометки «демо» хранятся
+ * по-русски, но в интерфейсе KZ/EN они не должны выглядеть как чужой язык.
+ */
+export const SOURCE_L: Record<string, Record<Lang, string>> = {
+  "Проходные баллы и гранты — демо, 2025": {
+    ru: "Проходные баллы и гранты — демо, 2025",
+    kk: "Өту балдары мен гранттар — демо, 2025",
+    en: "Passing scores and grants — demo, 2025",
+  },
+  "Стоимость и отбор — демо, 2025": {
+    ru: "Стоимость и отбор — демо, 2025",
+    kk: "Құны және іріктеу — демо, 2025",
+    en: "Tuition and selection — demo, 2025",
+  },
+  "Проходные баллы, творческий экзамен — демо, 2025": {
+    ru: "Проходные баллы, творческий экзамен — демо, 2025",
+    kk: "Өту балдары, шығармашылық емтихан — демо, 2025",
+    en: "Passing scores, creative exam — demo, 2025",
+  },
+};
+
+/** Подпись источника на выбранном языке (если перевода нет — как в данных) */
+export function sourceLabel(label: string, lang: Lang): string {
+  return SOURCE_L[label]?.[lang] ?? label;
+}
+
+export function warnNotRelevant(lang: Lang): string {
+  if (lang === "en")
+    return "Entry subjects don't match your interests or strengths — a fallback option, not a target.";
+  if (lang === "kk")
+    return "Түсу пәндері қызығушылықтарыңызға сәйкес емес — бұл қосымша нұсқа, мақсат емес.";
+  return "Предметы поступления не совпадают с вашими интересами и сильными сторонами — это запасной вариант, а не цель.";
 }
 
 export function reasonMajorMatch(lang: Lang): string {

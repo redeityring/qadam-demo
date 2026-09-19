@@ -52,7 +52,7 @@ export const DICT = {
     profileStep: "Шаг",
     substeps: [
       "О вас",
-      "Интересы",
+      "Интересы и специальности",
       "Успеваемость",
       "Бюджет и формат",
       "Экзамены",
@@ -166,6 +166,38 @@ export const DICT = {
     askSugg3: "Что делать в первую очередь?",
     askSugg4: "Реально ли поступить за рубеж с моим бюджетом?",
     askFirstTime: "Первый вопрос за день +10 XP",
+    // лимит и согласие ИИ
+    askQuotaTitle: "ИИ-запросы: сколько осталось сегодня",
+    askQuotaUsed: "ИИ сегодня:",
+    askQuotaExhausted: "Лимит ИИ на сегодня исчерпан ({limit}/{limit}).",
+    askQuotaExhaustedShort: "лимит ИИ на сегодня исчерпан",
+    askQuotaResets: "Лимит обновится в {time} по времени Астаны.",
+    askConsentTitle: "Передача профиля ИИ — нужно ваше согласие",
+    askConsentLead:
+      "Чтобы ответ был по делу, ИИ получает часть анкеты. Модель работает на внешнем сервисе (OpenRouter), поэтому согласие мы спрашиваем заранее.",
+    askConsentItems: [
+      "Передаём: класс, город, интересы, силу предметов, желаемые специальности, бюджет, формат обучения, экзамены и баллы ЕНТ/IELTS/SAT.",
+      "Не передаём: избранное, сравнение и отметки плана, а также контакты — имя и e-mail мы вообще не собираем.",
+      "Вопрос и профиль уходят на сервер Qadam и в модель; они не используются для обучения модели.",
+    ],
+    askConsentNote:
+      "Согласие можно отозвать в любой момент — тогда профиль больше не будет уходить в ИИ.",
+    askConsentDetails: "Показать точный запрос",
+    askConsentDetailsNote:
+      "Сервер валидирует запрос и отбрасывает всё, чего нет в списке выше. Лимит — не более {limit} обращений к ИИ в сутки.",
+    askConsentAccept: "Согласен, задать вопрос",
+    askConsentRevoke: "Отозвать согласие",
+    askConsentRequired: "Нужно согласие на передачу профиля ИИ — подтвердите его выше.",
+    askRateLimited: "Слишком много запросов за минуту. Подождите немного и попробуйте снова.",
+    askTypeHint: "Введите вопрос, чтобы отправить",
+    askBuiltin: "Ответ встроенного офлайн-консультанта Qadam (без внешней модели).",
+    askModelLabel: "Модель",
+    // состояния ошибок
+    errorTitle: "Что-то пошло не так на этом экране",
+    errorText:
+      "Ваш профиль сохранён в браузере — данные не потеряны. Попробуйте перезагрузить экран или вернуться к анкете и повторить путь.",
+    errorCode: "Код ошибки",
+    errorRetry: "Перезагрузить экран",
     // фавориты
     favTitle: "Избранное",
     favEmpty: "Пока пусто. Добавьте программы кнопкой «В избранное» на экране рекомендаций.",
@@ -187,7 +219,7 @@ export const DICT = {
     // проверка анкеты (шаг 7)
     reviewTitle: "Проверка",
     reviewD: "Проверьте ответы — можно вернуться и изменить любой пункт.",
-    reviewGoal: "Куда aiming:",
+    reviewGoal: "Цель:",
     reviewDone: "Всё верно — показать рекомендации",
     reviewGrade: "Класс",
     reviewCity: "Город",
@@ -246,7 +278,7 @@ export const DICT = {
     profileStep: "Қадам",
     substeps: [
       "Сіз туралы",
-      "Қызығушылық",
+      "Қызығушылықтар",
       "Үлгерімі",
       "Бюджет және формат",
       "Емтихандар",
@@ -294,7 +326,7 @@ export const DICT = {
       "Ұсыныстар экранында 2–3 нұсқаны таңдаңыз — сізге маңызды параметрлер бойынша салыстырыңыз.",
     compareEmptyT: "Кемінде екі нұсқаны таңдаңыз",
     compareEmptyD:
-      "Ұсыныстар экранында «Салыстыру» түймесімен бағдарламаны белгілеңіз — немесе екі үздік нұсқаны автматиялық салыстырыңыз.",
+      "Ұсыныстар экранында «Салыстыру» түймесімен бағдарламаны белгілеңіз — немесе екі үздік нұсқаны автоматты түрде салыстырыңыз.",
     compareAuto: "Топ-2 авт салыстыру",
     backToRecs: "Ұсыныстарға",
     param: "Параметр",
@@ -351,6 +383,37 @@ export const DICT = {
     askSugg3: "Алдымен не істеу керек?",
     askSugg4: "Менің бюджетіммен шетелде оқуға бола ма?",
     askFirstTime: "Күнгі алғашқы сұрақ +10 XP",
+    // ЖИ лимиті мен келісім
+    askQuotaTitle: "ЖИ сұраныстары: бүгін нешеуі қалды",
+    askQuotaUsed: "ЖИ бүгін:",
+    askQuotaExhausted: "Бүгінгі ЖИ лимиті таусылды ({limit}/{limit}).",
+    askQuotaExhaustedShort: "бүгінгі ЖИ лимиті таусылды",
+    askQuotaResets: "Лимит {time} (Астана уақыты) кезінде жаңарады.",
+    askConsentTitle: "Профильді ЖИ-ге беру — келісіміңіз керек",
+    askConsentLead:
+      "Жауап нақты болуы үшін ЖИ сауалнаманың бір бөлігін алады. Модель сыртқы қызметте (OpenRouter) жұмыс істейді, сондықтан келісімді алдын ала сұраймыз.",
+    askConsentItems: [
+      "Жібереміз: сынып, қала, қызығушылықтар, пәндердің күші, қалаған мамандықтар, бюджет, оқу форматы, емтихандар мен ЖБТ/IELTS/SAT балдары.",
+      "Жібермейміз: таңдаулылар, салыстыру және жоспар белгілері, сондай-ақ байланыс деректері — аты-жөні мен e-mail мүлде жиналмайды.",
+      "Сұрақ пен профиль Qadam серверіне және модельге жіберіледі; олар модельді оқытуға пайдаланылмайды.",
+    ],
+    askConsentNote: "Келісімді кез келген уақытта қайтарып алуға болады — сонда профиль ЖИ-ге жіберілмейді.",
+    askConsentDetails: "Нақты сұранысты көрсету",
+    askConsentDetailsNote:
+      "Сервер сұранысты тексереді және жоғарыдағы тізімде жоқтың бәрін тастайды. Лимит — тәулігіне {limit} ЖИ сұранысынан аспайды.",
+    askConsentAccept: "Келісемін, сұрақ қою",
+    askConsentRevoke: "Келісімді қайтарып алу",
+    askConsentRequired: "Профильді ЖИ-ге беруге келісім керек — жоғарыда растаңыз.",
+    askRateLimited: "Минутына тым көп сұраныс. Сәл күтіп, қайталап көріңіз.",
+    askTypeHint: "Жіберу үшін сұрақ жазыңыз",
+    askBuiltin: "Qadam-ның кірістірілген офлайн-кеңесшісінің жауабы (сыртқы модельсіз).",
+    askModelLabel: "Модель",
+    // қате күйлері
+    errorTitle: "Осы экранда бірдеңе дұрыс болмады",
+    errorText:
+      "Профиліңіз браузерде сақталған — деректер жоғалмады. Экранды жаңартып көріңіз немесе сауалнамаға қайта оралыңыз.",
+    errorCode: "Қате коды",
+    errorRetry: "Экранды жаңарту",
     favTitle: "Таңдамалы",
     favEmpty: "Әзірге бос. Ұсыныстар экранында «Таңдамалыға» түймесін басыңыз.",
     favOpen: "Таңдамалыны ашу",
@@ -425,7 +488,7 @@ export const DICT = {
     profileStep: "Step",
     substeps: [
       "About you",
-      "Interests",
+      "Interests & majors",
       "Grades",
       "Budget & format",
       "Exams",
@@ -531,6 +594,37 @@ export const DICT = {
     askSugg3: "What should I do first?",
     askSugg4: "Can I realistically study abroad with my budget?",
     askFirstTime: "First question of the day +10 XP",
+    // AI quota and consent
+    askQuotaTitle: "AI questions left today",
+    askQuotaUsed: "AI today:",
+    askQuotaExhausted: "Today's AI limit is used up ({limit}/{limit}).",
+    askQuotaExhaustedShort: "daily AI limit reached",
+    askQuotaResets: "The limit resets at {time} Astana time.",
+    askConsentTitle: "Sharing your profile with AI needs your consent",
+    askConsentLead:
+      "To give a relevant answer, the AI receives part of your questionnaire. The model runs on an external service (OpenRouter), so we ask for consent up front.",
+    askConsentItems: [
+      "We send: grade, city, interests, subject strengths, desired majors, budget, study format, exams and ENT/IELTS/SAT scores.",
+      "We never send: favourites, comparison and plan checkmarks, or any contacts — we don't collect your name or e-mail at all.",
+      "The question and profile go to the Qadam server and to the model; they are not used for model training.",
+    ],
+    askConsentNote: "You can revoke consent at any time — then your profile stops going to the AI.",
+    askConsentDetails: "Show the exact request",
+    askConsentDetailsNote:
+      "The server validates this request and drops anything not listed above. The limit is {limit} AI requests per day.",
+    askConsentAccept: "I agree — ask a question",
+    askConsentRevoke: "Revoke consent",
+    askConsentRequired: "We need your consent to share the profile with AI — confirm it above.",
+    askRateLimited: "Too many requests per minute. Please wait a moment and try again.",
+    askTypeHint: "Type a question to send",
+    askBuiltin: "Answered by Qadam's built-in offline consultant (no external model).",
+    askModelLabel: "Model",
+    // error states
+    errorTitle: "Something went wrong on this screen",
+    errorText:
+      "Your profile is stored in the browser, so nothing is lost. Try reloading the screen, or go back to the questionnaire and continue.",
+    errorCode: "Error code",
+    errorRetry: "Reload the screen",
     favTitle: "Saved programs",
     favEmpty: "Nothing here yet. Add programs with the “Save” button on the recommendations screen.",
     favOpen: "Open saved",

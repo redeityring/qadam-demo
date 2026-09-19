@@ -14,6 +14,7 @@ import { useLang } from "@/i18n/LanguageContext";
 import { XP_PER_ROADMAP_STEP, useGamification } from "@/i18n/GamificationContext";
 import { firstOpenStep, getRoadmap, roadmapSectionLabel, ROADMAP_SECTIONS } from "@/lib/engine/roadmap";
 import { NextActionCard } from "@/components/NextActionCard";
+import { sourceLabel } from "@/i18n/engine";
 
 export default function RoadmapPage() {
   const { profile, complete, update } = useProfile();
@@ -48,7 +49,8 @@ export default function RoadmapPage() {
     return (
       <JourneyLayout>
         <div className="card p-6 text-center">
-          <h1 className="section-title">{t.resultsTitle}</h1>
+          <h1 className="section-title">{t.roadmapTitle}</h1>
+          <p className="muted mt-2">{t.calEmpty}</p>
           <Link href="/profile" className="btn btn-primary mt-4">
             {t.fillProfile} →
           </Link>
@@ -163,10 +165,12 @@ export default function RoadmapPage() {
                                 rel="noreferrer"
                                 className="badge badge-source hover:underline"
                               >
-                                ↗ {s.source.label}
+                                ↗ {sourceLabel(s.source.label, lang)}
                               </a>
                             ) : (
-                              <span className="badge badge-demo">{s.source.label}</span>
+                              <span className="badge badge-demo">
+                                {sourceLabel(s.source.label, lang)}
+                              </span>
                             )}
                           </div>
                         </div>

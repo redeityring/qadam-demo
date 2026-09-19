@@ -45,11 +45,12 @@ export function Stepper() {
           const state = idx === currentIdx ? "current" : isDone(idx, step.id) ? "done" : "todo";
           const clickable = idx <= currentIdx || complete;
           const label = step.label[lang];
+          const href = step.id === "next" ? "/roadmap#next-action" : step.path;
           return (
             <li key={step.id} className="flex flex-1 items-center gap-1 last:flex-none">
               {clickable ? (
                 <Link
-                  href={step.path}
+                  href={href}
                   aria-current={state === "current" ? "step" : undefined}
                   className={`flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold transition ${
                     state === "current"
@@ -86,7 +87,7 @@ export function Stepper() {
         })}
       </ol>
 
-      {/* Мобильный: компактная полоса прогресса */}
+      {/* Мобильный: компактная полоса прогресса + ссылка на «Следующий шаг» */}
       <div className="md:hidden">
         <div className="mb-1.5 flex items-center justify-between text-xs font-semibold">
           <span className="text-pine">
@@ -102,6 +103,12 @@ export function Stepper() {
             style={{ width: `${((currentIdx + 1) / STEPS.length) * 100}%` }}
           />
         </div>
+        <Link
+          href="/roadmap#next-action"
+          className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-semibold text-clay hover:underline"
+        >
+          7 → {STEPS[6].label[lang]}
+        </Link>
       </div>
     </nav>
   );
